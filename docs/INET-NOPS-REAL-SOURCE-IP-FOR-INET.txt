@@ -1,0 +1,154 @@
+INET NOPS - Real Outbound Source IP Status
+Date: 2026-06-30
+Project: POS Preview / SST iPOS
+Production URL: https://sstipos-ten.vercel.app
+Vercel project: sstipos
+Vercel project id: prj_FA0nK7DoGU1Se6olw48a4wjZlaDi
+Vercel team/org id: team_ZKmv6uQSU9QUyP08mxAr2YDI
+Latest checked production deployment:
+- Deployment id: dpl_BMDaz5w95WYr5uHhcLK3w2LS1N3b
+- Deployment URL: https://sstipos-yyzef1vu0-sstdevelopaminnos-projects.vercel.app
+- Alias: https://sstipos-ten.vercel.app
+- Status: Ready
+- Runtime region shown by Vercel inspect: iad1
+
+This file is safe to send to INET support.
+No Merchant Key, token, OAuth credential, or secret value is included.
+
+============================================================
+IMPORTANT STATUS
+============================================================
+
+INET asked for the IP address that will send requests to INET so they can
+allowlist it.
+
+The four IP addresses previously checked by INET:
+
+- 216.198.79.67
+- 64.29.17.67
+- 216.198.79.195
+- 64.29.17.195
+
+are NOT confirmed outbound source IPs.
+
+They are Vercel DNS / edge / inbound addresses resolved from the public
+website domain or deployment domain. They should not be used as the final
+source IP allowlist for POS Preview -> INET API calls.
+
+Current conclusion:
+
+POS Preview is hosted on Vercel Serverless Functions and does not currently
+have a confirmed fixed outbound source IP documented in this repository.
+Therefore, there is no real fixed source IP that can be sent to INET yet.
+
+To provide INET with the real source IP, one of these must be completed first:
+
+1. Enable Vercel Static IPs / static egress for the Vercel project "sstipos".
+   After Vercel assigns the static outbound IP addresses, send those assigned
+   IP addresses to INET.
+
+2. Route all INET API requests through a fixed outbound proxy or NAT gateway.
+   Then send the proxy/NAT public IP address to INET.
+
+Until one of the above is enabled, any IP resolved from the website domain is
+not the correct source IP for allowlisting.
+
+============================================================
+ACTION NEEDED IN VERCEL
+============================================================
+
+Owner/admin action required:
+
+1. Open Vercel Dashboard.
+2. Select team/org:
+   sstdevelopaminnos-projects
+3. Select project:
+   sstipos
+4. Open the project networking/connectivity settings.
+5. Enable Static IPs / Static Egress for the project.
+6. Copy the static outbound IP addresses assigned by Vercel.
+7. Paste them below and send this file to INET.
+
+Vercel official reference:
+https://vercel.com/docs/connectivity/static-ips
+
+============================================================
+STATIC OUTBOUND SOURCE IP TO SEND TO INET
+============================================================
+
+Status: PENDING - Vercel Static IPs have not been confirmed as enabled yet.
+
+After enabling Static IPs, replace this section with the assigned IPs:
+
+- <STATIC_OUTBOUND_IP_1_FROM_VERCEL>
+- <STATIC_OUTBOUND_IP_2_FROM_VERCEL>
+
+Message to INET after Static IPs are assigned:
+
+Dear INET team,
+
+Please allowlist the following fixed outbound source IP address(es) for
+POS Preview / SST iPOS requests to INET NOPS UAT:
+
+- <STATIC_OUTBOUND_IP_1_FROM_VERCEL>
+- <STATIC_OUTBOUND_IP_2_FROM_VERCEL>
+
+Public callback/result URLs:
+
+- Result page / apUrl:
+  https://sstipos-ten.vercel.app/payment/inet/result
+
+- Callback URL:
+  https://sstipos-ten.vercel.app/api/payments/inet/callback
+
+Please confirm after the allowlist is updated so we can retest INET QR
+payment creation from UAT.
+
+============================================================
+CURRENT TECHNICAL ENDPOINTS
+============================================================
+
+Application -> INET request direction:
+
+POS Preview Vercel Serverless Function
+-> INET NOPS OAuth endpoint
+-> INET NOPS create payment endpoint
+
+Callback direction:
+
+INET
+-> https://sstipos-ten.vercel.app/api/payments/inet/callback
+
+Important:
+
+The callback URL is an inbound URL for INET to notify POS Preview.
+It is not the same as the outbound source IP used by POS Preview when calling
+INET APIs.
+
+============================================================
+VERIFICATION DONE
+============================================================
+
+Checked on 2026-06-30:
+
+- Vercel production deployment is Ready.
+- Production alias is active:
+  https://sstipos-ten.vercel.app
+- Vercel inspect shows runtime region:
+  iad1
+- No confirmed static outbound source IP is present in repository documents.
+- No Vercel Static IP assignment has been confirmed from CLI output in this run.
+
+============================================================
+DO NOT SEND AS SOURCE IP
+============================================================
+
+Do not send these as final source IPs for allowlisting:
+
+- 216.198.79.67
+- 64.29.17.67
+- 216.198.79.195
+- 64.29.17.195
+
+These were only DNS/edge/inbound IP observations and INET already reported
+that no logs were found for them.

@@ -1,0 +1,180 @@
+INET NOPS UAT cURL / Body / Path Details
+Prepared for INET support
+Date: 2026-06-26
+Project: SST iPOS
+
+This text file is safe to send to INET support.
+Secret values are intentionally redacted.
+
+============================================================
+CURRENT ISSUE
+============================================================
+
+The POS server can reach the INET UAT OAuth and access-token steps,
+but the final create-payment request fails.
+
+Current error from POS:
+
+inet_nops_create_payment_http_403:html_response
+
+Meaning:
+The dynamic create-payment link returned by INET responds with HTTP 403
+and an HTML page instead of the expected JSON payload.
+
+Please confirm:
+
+1. Whether this UAT Merchant Key is enabled for QR create-payment.
+2. Whether INET requires IP/domain allowlisting for server-side requests from Vercel.
+3. Whether the final create-payment call must use POST JSON body:
+   { "accessToken": "..." }
+   or a different method/header/body.
+4. Whether the apUrl domain must be registered/approved before create-payment is allowed.
+
+============================================================
+PUBLIC POS URLS
+============================================================
+
+Result page / apUrl:
+https://sstipos-ten.vercel.app/payment/inet/result
+
+Server-to-server callback URL:
+https://sstipos-ten.vercel.app/api/payments/inet/callback
+
+============================================================
+STEP 1: OAUTH
+============================================================
+
+Method:
+POST
+
+Path / URL:
+https://new-ops-poc.inet.co.th/uat/oauth/api/v1/oauth-token
+
+Body:
+{
+  "key": "<INET_UAT_MERCHANT_KEY>",
+  "orderId": "SST260626110606ABCDEF123456789"
+}
+
+cURL:
+curl -i -X POST "https://new-ops-poc.inet.co.th/uat/oauth/api/v1/oauth-token" \
+  -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  --data '{
+    "key": "<INET_UAT_MERCHANT_KEY>",
+    "orderId": "SST260626110606ABCDEF123456789"
+  }'
+
+Expected response:
+{
+  "code": 201,
+  "token": "<OAUTH_TOKEN>"
+}
+
+The POS also accepts token fields named:
+access_token, oauthToken, oauth_token
+
+============================================================
+STEP 2: ACCESS TOKEN
+============================================================
+
+Method:
+POST
+
+Path / URL:
+https://new-ops-poc.inet.co.th/uat/api/v1/sandbox/payment-transactions/access-token
+
+Body:
+{
+  "key": "<INET_UAT_MERCHANT_KEY>",
+  "orderId": "SST260626110606ABCDEF123456789",
+  "orderDesc": "POS TEST-BILL",
+  "amount": 125,
+  "apUrl": "https://sstipos-ten.vercel.app/payment/inet/result",
+  "payType": "QR",
+  "regRef": ""
+}
+
+cURL:
+curl -i -X POST "https://new-ops-poc.inet.co.th/uat/api/v1/sandbox/payment-transactions/access-token" \
+  -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <OAUTH_TOKEN>" \
+  --data '{
+    "key": "<INET_UAT_MERCHANT_KEY>",
+    "orderId": "SST260626110606ABCDEF123456789",
+    "orderDesc": "POS TEST-BILL",
+    "amount": 125,
+    "apUrl": "https://sstipos-ten.vercel.app/payment/inet/result",
+    "payType": "QR",
+    "regRef": ""
+  }'
+
+Expected response:
+{
+  "code": 201,
+  "accessToken": "<PAYMENT_ACCESS_TOKEN>",
+  "link": "<CREATE_PAYMENT_LINK>"
+}
+
+The POS also accepts:
+- access token field: access_token
+- link fields: paymentUrl, payment_url
+
+============================================================
+STEP 3: CREATE PAYMENT
+============================================================
+
+Method currently used by POS:
+POST
+
+Path / URL:
+<CREATE_PAYMENT_LINK returned from Step 2>
+
+Body:
+{
+  "accessToken": "<PAYMENT_ACCESS_TOKEN>"
+}
+
+cURL:
+curl -i -X POST "<CREATE_PAYMENT_LINK>" \
+  -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  --data '{
+    "accessToken": "<PAYMENT_ACCESS_TOKEN>"
+  }'
+
+Expected response:
+{
+  "code": 200,
+  "qrCode": "<BASE64_QR_IMAGE>"
+}
+
+The POS also accepts QR fields named:
+qr_code, qrcode, qr
+
+Actual current result:
+HTTP 403
+Content-Type: text/html
+
+============================================================
+POS ORDER ID FORMAT
+============================================================
+
+The POS generates a 30-character provider order ID:
+
+SST + YYMMDDHHMMSS + 15 random uppercase hex characters
+
+Example:
+SST260626110606ABCDEF123456789
+
+============================================================
+NOTES
+============================================================
+
+- Merchant Key is server-only and is never sent to the browser.
+- The POS UAT connection-test button only tests OAuth.
+- QR creation requires all three steps above.
+- The bill closes automatically only after INET sends a successful server-to-server callback with:
+  event = payment_status_change
+  detail.response_code = 0

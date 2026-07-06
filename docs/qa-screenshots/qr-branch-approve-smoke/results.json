@@ -1,0 +1,62 @@
+{
+  "generatedAt": "2026-05-28T05:51:48.338Z",
+  "baseUrl": "http://localhost:3001",
+  "input": {
+    "storeCode": "NDL-TH-001",
+    "branchCode": "",
+    "employeeCode": "EMP-000101"
+  },
+  "steps": [
+    {
+      "at": "2026-05-28T05:51:54.611Z",
+      "name": "store_verify",
+      "ok": true,
+      "status": 200
+    },
+    {
+      "at": "2026-05-28T05:51:59.657Z",
+      "name": "branch_select",
+      "ok": true,
+      "status": 200,
+      "branchId": "00000000-0000-0000-0000-000000000012",
+      "branchCode": "BKK-02"
+    },
+    {
+      "at": "2026-05-28T05:52:05.825Z",
+      "name": "qr_create",
+      "ok": true,
+      "status": 200
+    },
+    {
+      "at": "2026-05-28T05:52:05.825Z",
+      "name": "qr_token_received",
+      "ok": true,
+      "tokenPrefix": "sdh49mbT",
+      "tokenLength": 32,
+      "payloadTokenPrefix": "sdh49mbT",
+      "payloadTokenMatches": true
+    },
+    {
+      "at": "2026-05-28T05:52:13.547Z",
+      "name": "qr_status_before_approve",
+      "ok": true,
+      "status": 200,
+      "statusValue": "pending"
+    },
+    {
+      "at": "2026-05-28T05:52:19.593Z",
+      "name": "qr_approve",
+      "ok": true,
+      "status": 200
+    },
+    {
+      "at": "2026-05-28T05:52:22.084Z",
+      "name": "qr_status_poll",
+      "ok": true,
+      "status": 200,
+      "statusValue": "approved"
+    }
+  ],
+  "result": "passed",
+  "errors": []
+}

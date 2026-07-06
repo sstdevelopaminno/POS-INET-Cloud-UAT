@@ -1,0 +1,973 @@
+import type {
+  CreateManualDeliveryOrderInput,
+  KitchenTicketTemplate,
+  PaymentMethod,
+  PrintJob,
+  PrintJobStatus,
+  PrinterConnectionType,
+  PrinterProfile,
+  ReceiptTemplate
+} from "@pos/shared-types";
+import type { AuthContext } from "@/lib/auth-context";
+import { appendAuditLog } from "@/lib/audit-log";
+import { readEnv } from "@/lib/env";
+import { loadReceiptStoreProfile, type ReceiptStoreProfile } from "@/lib/services/store-profile-service";
+import { getSupabaseServiceClient } from "@/lib/supabase-admin";
+import { BluetoothBridgeAdapter } from "@/lib/printing/adapters/bluetooth-bridge-adapter";
+import { LocalBridgeAdapter } from "@/lib/printing/adapters/local-bridge-adapter";
+import { NetworkEscPosAdapter } from "@/lib/printing/adapters/network-escpos-adapter";
+import { StarWebPrntAdapter } from "@/lib/printing/adapters/star-webprnt-adapter";
+import type { PrinterAdapter } from "@/lib/printing/adapters/types";
+
+const DEFAULT_MAX_RETRY_COUNT = 3;
+
+type JsonRecord = Record<string, unknown>;
+
+type PrinterProfileRow = PrinterProfile & {
+  created_by?: string | null;
+};
+
+type PrintJobRow = PrintJob & {
+  created_by?: string | null;
+};
+
+type PrintJobWithPrinter = PrintJobRow & {
+  printer_profiles: PrinterProfileRow | null;
+};
+
+type EnqueuePrintJobInput = {
+  auth: AuthContext;
+  printer: PrinterProfileRow;
+  orderId: string | null;
+  printerRole: "receipt" | "kitchen" | "report";
+  payloadText: string;
+  payloadJson?: JsonRecord;
+  metadata?: JsonRecord;
+  maxRetryCount?: number;
+};
+
+type CreatePrinterInput = {
+  printer_name: string;
+  printer_role: "receipt" | "kitchen" | "report";
+  connection_type: PrinterConnectionType;
+  ip_address?: string | null;
+  port?: number | null;
+  paper_width_mm: 58 | 80;
+  enabled?: boolean;
+  metadata?: JsonRecord;
+};
+
+type ReprintResult = {
+  mode: "retried_failed_job" | "created_new_job";
+  jobs: PrintJobRow[];
+};
+
+type ReprintDeps = {
+  processJob?: (jobId: string) => Promise<PrintJobRow | null>;
+};
+
+type QueueBluetoothReceiptInput = {
+  orderId?: string | null;
+  orderNo?: string | null;
+  receiptHtml: string;
+};
+
+const adapters: Record<PrinterConnectionType, PrinterAdapter> = {
+  NETWORK_ESC_POS: new NetworkEscPosAdapter(),
+  STAR_WEBPRNT: new StarWebPrntAdapter(),
+  LOCAL_BRIDGE: new LocalBridgeAdapter(),
+  BLUETOOTH_BRIDGE: new BluetoothBridgeAdapter()
+};
+
+function asRecord(value: unknown): JsonRecord {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return {};
+  }
+  return value as JsonRecord;
+}
+
+function normalizeText(value: string | null | undefined): string | null {
+  const trimmed = value?.trim();
+  return trimmed ? trimmed : null;
+}
+
+function ensureManagerOrOwner(auth: AuthContext) {
+  if (auth.branchRole !== "manager" && auth.branchRole !== "owner") {
+    throw new Error("forbidden_role");
+  }
+}
+
+function nowIso() {
+  return new Date().toISOString();
+}
+
+function money(value: number): string {
+  return value.toFixed(2);
+}
+
+function line(char: string, width: number): string {
+  return char.repeat(width);
+}
+
+function center(value: string, width: number): string {
+  const safe = value.length > width ? value.slice(0, width) : value;
+  const left = Math.floor((width - safe.length) / 2);
+  const right = width - safe.length - left;
+  return `${" ".repeat(Math.max(0, left))}${safe}${" ".repeat(Math.max(0, right))}`;
+}
+
+function row(left: string, right: string, width: number): string {
+  const available = Math.max(0, width - right.length - 1);
+  const safeLeft = left.length > available ? left.slice(0, available) : left;
+  const spaces = " ".repeat(Math.max(1, width - safeLeft.length - right.length));
+  return `${safeLeft}${spaces}${right}`;
+}
+
+export function renderReceiptTemplate(template: ReceiptTemplate, paperWidthMm: 58 | 80): string {
+  const width = paperWidthMm === 58 ? 32 : 42;
+  const storeName = normalizeText(template.store_name) ?? template.branch_name;
+  const storeAddress = normalizeText(template.store_address);
+  const storePhone = normalizeText(template.store_phone);
+  const lines = [
+    center(storeName, width),
+    ...(storeAddress ? [center(storeAddress.slice(0, width * 2), width)] : []),
+    ...(storePhone ? [center(`Tel: ${storePhone}`, width)] : []),
+    center(template.branch_name, width),
+    center("RECEIPT", width),
+    line("-", width),
+    row(`Order: ${template.order_no}`, template.paid_at_iso.slice(0, 16).replace("T", " "), width),
+    row("Cashier", template.cashier_name, width),
+    line("-", width)
+  ];
+
+  for (const item of template.items) {
+    lines.push(row(`${item.qty}x ${item.name}`, money(item.line_total), width));
+  }
+
+  lines.push(line("-", width));
+  lines.push(row("Subtotal", money(template.subtotal), width));
+  lines.push(row("Discount", money(template.discount_amount), width));
+  lines.push(row("Tax", money(template.tax_amount), width));
+  lines.push(row("TOTAL", money(template.total_amount), width));
+  lines.push(row("Payment", template.payment_method, width));
+  if (template.note) {
+    lines.push(line("-", width));
+    lines.push(template.note.slice(0, width));
+  }
+  lines.push(line("-", width));
+  lines.push(center(`Thank you (${template.currency})`, width));
+  lines.push("");
+
+  return lines.join("\n");
+}
+
+function receiptStoreTemplateFields(storeProfile: ReceiptStoreProfile | null) {
+  return {
+    store_name: storeProfile?.display_name || storeProfile?.name,
+    store_logo_url: storeProfile?.logo_url,
+    store_address: storeProfile?.company_address,
+    store_phone: storeProfile?.contact_phone
+  };
+}
+
+function receiptStorePayload(storeProfile: ReceiptStoreProfile | null): JsonRecord {
+  return {
+    store_name: storeProfile?.display_name ?? null,
+    store_logo_url: storeProfile?.logo_url ?? null,
+    store_address: storeProfile?.company_address ?? null,
+    store_phone: storeProfile?.contact_phone ?? null,
+    store_code: storeProfile?.code ?? null
+  };
+}
+
+async function loadReceiptBranchName(auth: AuthContext, fallbackName?: string | null) {
+  const fallback = normalizeText(fallbackName) ?? normalizeText(auth.branchId) ?? "Branch POS";
+  if (!auth.tenantId || !auth.branchId) return fallback;
+  const supabase = getSupabaseServiceClient();
+  const { data, error } = await supabase
+    .from("branches")
+    .select("name")
+    .eq("tenant_id", auth.tenantId)
+    .eq("id", auth.branchId)
+    .maybeSingle<{ name: string | null }>();
+  if (error) return fallback;
+  return normalizeText(data?.name) ?? fallback;
+}
+
+export function renderKitchenTicketTemplate(template: KitchenTicketTemplate, paperWidthMm: 58 | 80): string {
+  const width = paperWidthMm === 58 ? 32 : 42;
+  const lines = [
+    center(template.branch_name, width),
+    center("KITCHEN TICKET", width),
+    line("-", width),
+    row(`Order: ${template.order_no}`, template.ticket_at_iso.slice(11, 19), width),
+    row("Station", template.station, width),
+    line("-", width)
+  ];
+
+  for (const item of template.items) {
+    lines.push(`${item.qty}x ${item.name}`.slice(0, width));
+    if (item.note) {
+      lines.push(`  * ${item.note}`.slice(0, width));
+    }
+  }
+  lines.push(line("-", width));
+  lines.push("");
+
+  return lines.join("\n");
+}
+
+export async function listPrinterProfiles(auth: AuthContext) {
+  ensureManagerOrOwner(auth);
+  const supabase = getSupabaseServiceClient();
+  const { data, error } = await supabase
+    .from("printer_profiles")
+    .select("id,tenant_id,branch_id,printer_name,printer_role,connection_type,ip_address,port,paper_width_mm,enabled,metadata,created_at,updated_at")
+    .eq("tenant_id", auth.tenantId!)
+    .eq("branch_id", auth.branchId!)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return (data ?? []) as PrinterProfileRow[];
+}
+
+export async function createPrinterProfile(auth: AuthContext, input: CreatePrinterInput) {
+  ensureManagerOrOwner(auth);
+  const supabase = getSupabaseServiceClient();
+  const ipAddress = normalizeText(input.ip_address);
+  const metadata = asRecord(input.metadata);
+
+  if (input.connection_type === "NETWORK_ESC_POS" && !ipAddress) {
+    throw new Error("ip_address_required_for_network_esc_pos");
+  }
+  if (input.connection_type === "BLUETOOTH_BRIDGE") {
+    const metadataBluetoothAddress = normalizeText(String(metadata.bluetooth_address ?? metadata.bluetooth_mac ?? metadata.bt_address ?? ""));
+    const metadataBluetoothName = normalizeText(String(metadata.bluetooth_name ?? metadata.device_name ?? ""));
+    const metadataBridgeUrl = normalizeText(String(metadata.bridge_url ?? ""));
+    const envBridgeUrl = readEnv("PRINT_BLUETOOTH_BRIDGE_URL") ?? readEnv("PRINT_BRIDGE_URL") ?? null;
+    if (!metadataBluetoothAddress && !metadataBluetoothName) {
+      throw new Error("bluetooth_target_required");
+    }
+    if (!metadataBridgeUrl && !envBridgeUrl) {
+      throw new Error("bluetooth_bridge_url_required");
+    }
+  }
+
+  const { data, error } = await supabase
+    .from("printer_profiles")
+    .insert({
+      tenant_id: auth.tenantId,
+      branch_id: auth.branchId,
+      printer_name: input.printer_name.trim(),
+      printer_role: input.printer_role,
+      connection_type: input.connection_type,
+      ip_address: ipAddress,
+      port: input.port ?? null,
+      paper_width_mm: input.paper_width_mm,
+      enabled: input.enabled ?? true,
+      metadata,
+      created_by: auth.userId
+    })
+    .select("id,tenant_id,branch_id,printer_name,printer_role,connection_type,ip_address,port,paper_width_mm,enabled,metadata,created_at,updated_at")
+    .single();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  await appendAuditLog({
+    tenantId: auth.tenantId!,
+    branchId: auth.branchId!,
+    actorUserId: auth.userId,
+    actorRole: auth.branchRole!,
+    action: "printer_profile_created",
+    targetTable: "printer_profiles",
+    targetId: data.id,
+    metadata: {
+      printer_role: input.printer_role,
+      connection_type: input.connection_type,
+      paper_width_mm: input.paper_width_mm
+    }
+  });
+
+  return data as PrinterProfileRow;
+}
+
+export async function enqueuePrintJob(input: EnqueuePrintJobInput): Promise<PrintJobRow> {
+  const supabase = getSupabaseServiceClient();
+  const retryLimit = Number.isFinite(input.maxRetryCount) ? Math.max(0, Number(input.maxRetryCount)) : DEFAULT_MAX_RETRY_COUNT;
+
+  const { data, error } = await supabase
+    .from("print_jobs")
+    .insert({
+      tenant_id: input.auth.tenantId,
+      branch_id: input.auth.branchId,
+      order_id: input.orderId,
+      printer_id: input.printer.id,
+      printer_role: input.printerRole,
+      connection_type: input.printer.connection_type,
+      status: "pending",
+      payload_text: input.payloadText,
+      payload_json: input.payloadJson ?? {},
+      retry_count: 0,
+      max_retry_count: retryLimit,
+      created_by: input.auth.userId,
+      metadata: input.metadata ?? {}
+    })
+    .select(
+      "id,tenant_id,branch_id,order_id,printer_id,printer_role,connection_type,status,payload_text,payload_json,retry_count,max_retry_count,last_error,printed_at,failed_at,created_at,updated_at,metadata"
+    )
+    .single();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data as PrintJobRow;
+}
+
+async function updatePrintJobStatus(
+  jobId: string,
+  patch: {
+    status: PrintJobStatus;
+    retry_count?: number;
+    last_error?: string | null;
+    printed_at?: string | null;
+    failed_at?: string | null;
+    metadata?: JsonRecord;
+  }
+) {
+  const supabase = getSupabaseServiceClient();
+  const { data, error } = await supabase
+    .from("print_jobs")
+    .update({
+      ...patch,
+      metadata: patch.metadata,
+      updated_at: nowIso()
+    })
+    .eq("id", jobId)
+    .select(
+      "id,tenant_id,branch_id,order_id,printer_id,printer_role,connection_type,status,payload_text,payload_json,retry_count,max_retry_count,last_error,printed_at,failed_at,created_at,updated_at,metadata"
+    )
+    .single();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data as PrintJobRow;
+}
+
+async function getPrintJobWithPrinter(jobId: string) {
+  const supabase = getSupabaseServiceClient();
+  const { data, error } = await supabase
+    .from("print_jobs")
+    .select(
+      "id,tenant_id,branch_id,order_id,printer_id,printer_role,connection_type,status,payload_text,payload_json,retry_count,max_retry_count,last_error,printed_at,failed_at,created_at,updated_at,metadata,printer_profiles(id,tenant_id,branch_id,printer_name,printer_role,connection_type,ip_address,port,paper_width_mm,enabled,metadata,created_at,updated_at)"
+    )
+    .eq("id", jobId)
+    .maybeSingle();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return (data ?? null) as PrintJobWithPrinter | null;
+}
+
+export async function processPrintJob(jobId: string): Promise<PrintJobRow | null> {
+  const job = await getPrintJobWithPrinter(jobId);
+  if (!job) {
+    return null;
+  }
+
+  const printer = job.printer_profiles;
+  if (!printer || !printer.enabled) {
+    return updatePrintJobStatus(jobId, {
+      status: "failed",
+      failed_at: nowIso(),
+      last_error: "printer_not_found_or_disabled"
+    });
+  }
+
+  const adapter = adapters[job.connection_type];
+  if (!adapter) {
+    return updatePrintJobStatus(jobId, {
+      status: "failed",
+      failed_at: nowIso(),
+      last_error: `adapter_not_registered:${job.connection_type}`
+    });
+  }
+
+  let retries = job.retry_count;
+  const maxRetryCount = job.max_retry_count;
+  let lastError = "";
+
+  while (retries < maxRetryCount) {
+    retries += 1;
+    await updatePrintJobStatus(jobId, {
+      status: "printing",
+      retry_count: retries,
+      last_error: null,
+      failed_at: null
+    });
+
+    try {
+      const mergedMetadata = {
+        ...asRecord(printer.metadata),
+        ...asRecord(job.metadata)
+      };
+      const payloadHtml = typeof mergedMetadata.payload_html === "string" ? String(mergedMetadata.payload_html) : null;
+      const result = await adapter.print({
+        printerId: printer.id,
+        printerName: printer.printer_name,
+        connectionType: job.connection_type,
+        ipAddress: printer.ip_address,
+        port: printer.port,
+        payloadText: job.payload_text,
+        payloadHtml,
+        metadata: mergedMetadata
+      });
+
+      return updatePrintJobStatus(jobId, {
+        status: "printed",
+        printed_at: nowIso(),
+        last_error: null,
+        failed_at: null,
+        metadata: {
+          ...asRecord(job.metadata),
+          print_result: asRecord(result.metadata),
+          bytes_sent: result.bytesSent ?? null,
+          provider_job_id: result.providerJobId ?? null
+        }
+      });
+    } catch (error) {
+      lastError = error instanceof Error ? error.message : "print_failed";
+      if (retries < maxRetryCount) {
+        await updatePrintJobStatus(jobId, {
+          status: "retrying",
+          retry_count: retries,
+          last_error: lastError
+        });
+        continue;
+      }
+    }
+  }
+
+  return updatePrintJobStatus(jobId, {
+    status: "failed",
+    retry_count: retries,
+    last_error: lastError || "print_failed",
+    failed_at: nowIso()
+  });
+}
+
+async function getEnabledPrintersByRole(auth: AuthContext, role: "receipt" | "kitchen" | "report") {
+  const supabase = getSupabaseServiceClient();
+  const { data, error } = await supabase
+    .from("printer_profiles")
+    .select("id,tenant_id,branch_id,printer_name,printer_role,connection_type,ip_address,port,paper_width_mm,enabled,metadata,created_at,updated_at")
+    .eq("tenant_id", auth.tenantId!)
+    .eq("branch_id", auth.branchId!)
+    .eq("printer_role", role)
+    .eq("enabled", true)
+    .order("created_at", { ascending: true });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return (data ?? []) as PrinterProfileRow[];
+}
+
+export async function queueAndProcessTestPrint(auth: AuthContext, printerId: string) {
+  ensureManagerOrOwner(auth);
+  const supabase = getSupabaseServiceClient();
+  const { data, error } = await supabase
+    .from("printer_profiles")
+    .select("id,tenant_id,branch_id,printer_name,printer_role,connection_type,ip_address,port,paper_width_mm,enabled,metadata,created_at,updated_at")
+    .eq("tenant_id", auth.tenantId!)
+    .eq("branch_id", auth.branchId!)
+    .eq("id", printerId)
+    .maybeSingle();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+  if (!data) {
+    throw new Error("printer_not_found");
+  }
+
+  const printer = data as PrinterProfileRow;
+  const receiptText = renderReceiptTemplate(
+    {
+      order_id: "00000000-0000-0000-0000-000000000000",
+      order_no: "TEST-PRINT",
+      branch_name: "Printer Test",
+      cashier_name: "System",
+      paid_at_iso: nowIso(),
+      currency: "THB",
+      items: [{ name: "Connectivity check", qty: 1, unit_price: 0, line_total: 0 }],
+      subtotal: 0,
+      discount_amount: 0,
+      tax_amount: 0,
+      total_amount: 0,
+      payment_method: "cash",
+      note: `Adapter: ${printer.connection_type}`
+    },
+    printer.paper_width_mm
+  );
+
+  const job = await enqueuePrintJob({
+    auth,
+    printer,
+    orderId: null,
+    printerRole: printer.printer_role,
+    payloadText: receiptText,
+    metadata: { test_print: true }
+  });
+
+  return processPrintJob(job.id);
+}
+
+export async function queueAndProcessBluetoothReceiptHtml(auth: AuthContext, input: QueueBluetoothReceiptInput) {
+  const normalizedHtml = input.receiptHtml?.trim();
+  if (!normalizedHtml) {
+    throw new Error("bluetooth_receipt_html_required");
+  }
+  if (normalizedHtml.length > 300_000) {
+    throw new Error("bluetooth_receipt_html_too_large");
+  }
+
+  const supabase = getSupabaseServiceClient();
+  const { data: printers, error: printerError } = await supabase
+    .from("printer_profiles")
+    .select("id,tenant_id,branch_id,printer_name,printer_role,connection_type,ip_address,port,paper_width_mm,enabled,metadata,created_at,updated_at")
+    .eq("tenant_id", auth.tenantId!)
+    .eq("branch_id", auth.branchId!)
+    .eq("printer_role", "receipt")
+    .eq("connection_type", "BLUETOOTH_BRIDGE")
+    .eq("enabled", true)
+    .order("created_at", { ascending: true });
+
+  if (printerError) {
+    throw new Error(printerError.message);
+  }
+
+  const bluetoothPrinters = (printers ?? []) as PrinterProfileRow[];
+  if (bluetoothPrinters.length === 0) {
+    throw new Error("bluetooth_receipt_printer_not_configured");
+  }
+
+  const orderNo = normalizeText(input.orderNo ?? undefined) ?? "RECEIPT";
+  const jobs: PrintJobRow[] = [];
+  for (const printer of bluetoothPrinters) {
+    const job = await enqueuePrintJob({
+      auth,
+      printer,
+      orderId: normalizeText(input.orderId ?? undefined),
+      printerRole: "receipt",
+      payloadText: `[HTML58] ${orderNo}`,
+      metadata: {
+        request_source: "pos_receipt_modal",
+        html_paper_width_mm: 58,
+        print_format: "html_58mm",
+        auto_connect: true,
+        connect_before_print: true,
+        payload_html: normalizedHtml
+      }
+    });
+    const processedJob = await processPrintJob(job.id);
+    jobs.push(processedJob ?? job);
+  }
+
+  return jobs;
+}
+
+export async function enqueueOrderPrintJobs(args: {
+  auth: AuthContext;
+  orderId: string;
+  orderNo: string;
+  paymentMethod: "cash" | "bank_transfer";
+  input: CreateManualDeliveryOrderInput;
+  includeKitchenTicket?: boolean;
+}) {
+  const { auth, orderId, orderNo, paymentMethod, input, includeKitchenTicket = false } = args;
+  const queuedJobs: PrintJobRow[] = [];
+  const storeProfile = await loadReceiptStoreProfile(auth.tenantId!);
+  const branchName = await loadReceiptBranchName(auth, storeProfile?.display_name ?? storeProfile?.name);
+  const receiptPrinters = await getEnabledPrintersByRole(auth, "receipt");
+
+  if (receiptPrinters.length > 0) {
+    for (const printer of receiptPrinters) {
+      const receiptPayload = renderReceiptTemplate(
+        {
+          ...receiptStoreTemplateFields(storeProfile),
+          order_id: orderId,
+          order_no: orderNo,
+          branch_name: branchName,
+          cashier_name: auth.userId,
+          paid_at_iso: nowIso(),
+          currency: "THB",
+          items: input.items.map((item) => ({
+            name: item.product_id,
+            qty: item.quantity,
+            unit_price: 0,
+            line_total: 0
+          })),
+          subtotal: input.app_total_amount,
+          discount_amount: input.discount_amount ?? 0,
+          tax_amount: 0,
+          total_amount: input.app_total_amount - (input.discount_amount ?? 0) - (input.gp_amount ?? 0),
+          payment_method: paymentMethod,
+          note: input.notes
+        },
+        printer.paper_width_mm
+      );
+
+      const job = await enqueuePrintJob({
+        auth,
+        printer,
+        orderId,
+        printerRole: "receipt",
+        payloadText: receiptPayload,
+        payloadJson: {
+          ...receiptStorePayload(storeProfile),
+          branch_name: branchName,
+          order_id: orderId,
+          order_no: orderNo
+        }
+      });
+      queuedJobs.push(job);
+      await processPrintJob(job.id);
+    }
+  }
+
+  if (includeKitchenTicket) {
+    const kitchenPrinters = await getEnabledPrintersByRole(auth, "kitchen");
+    for (const printer of kitchenPrinters) {
+      const kitchenPayload = renderKitchenTicketTemplate(
+        {
+          order_id: orderId,
+          order_no: orderNo,
+          branch_name: branchName,
+          ticket_at_iso: nowIso(),
+          station: "Main",
+          items: input.items.map((item) => ({
+            name: item.product_id,
+            qty: item.quantity,
+            note: item.notes
+          }))
+        },
+        printer.paper_width_mm
+      );
+
+      const job = await enqueuePrintJob({
+        auth,
+        printer,
+        orderId,
+        printerRole: "kitchen",
+        payloadText: kitchenPayload
+      });
+      queuedJobs.push(job);
+      await processPrintJob(job.id);
+    }
+  }
+
+  return queuedJobs;
+}
+
+export async function reprintOrderReceipt(auth: AuthContext, orderId: string, deps: ReprintDeps = {}): Promise<ReprintResult> {
+  ensureManagerOrOwner(auth);
+  const processJob = deps.processJob ?? processPrintJob;
+  const supabase = getSupabaseServiceClient();
+  const storeProfile = await loadReceiptStoreProfile(auth.tenantId!);
+  const { data: failedRows, error: failedError } = await supabase
+    .from("print_jobs")
+    .select(
+      "id,tenant_id,branch_id,order_id,printer_id,printer_role,connection_type,status,payload_text,payload_json,retry_count,max_retry_count,last_error,printed_at,failed_at,created_at,updated_at,metadata"
+    )
+    .eq("tenant_id", auth.tenantId!)
+    .eq("branch_id", auth.branchId!)
+    .eq("order_id", orderId)
+    .eq("printer_role", "receipt")
+    .eq("status", "failed")
+    .order("created_at", { ascending: false })
+    .limit(1);
+
+  if (failedError) {
+    throw new Error(failedError.message);
+  }
+
+  if (failedRows && failedRows.length > 0) {
+    const failed = failedRows[0] as PrintJobRow;
+    await updatePrintJobStatus(failed.id, {
+      status: "pending",
+      retry_count: 0,
+      last_error: null,
+      failed_at: null
+    });
+    const retried = await processJob(failed.id);
+    return {
+      mode: "retried_failed_job",
+      jobs: retried ? [retried] : []
+    };
+  }
+
+  const { data: orderRow, error: orderError } = await supabase
+    .from("orders")
+    .select("id,order_no,subtotal,total_amount,grand_total,discount_amount,gp_amount,tax_total,notes,created_by,payment_completed_at,created_at")
+    .eq("tenant_id", auth.tenantId!)
+    .eq("branch_id", auth.branchId!)
+    .eq("id", orderId)
+    .maybeSingle<{
+      id: string;
+      order_no: string;
+      subtotal: number | null;
+      total_amount: number | null;
+      grand_total: number | null;
+      discount_amount: number | null;
+      gp_amount: number | null;
+      tax_total: number | null;
+      notes: string | null;
+      created_by: string | null;
+      payment_completed_at: string | null;
+      created_at: string;
+    }>();
+
+  if (orderError) {
+    throw new Error(orderError.message);
+  }
+  if (!orderRow) {
+    throw new Error("order_not_found");
+  }
+
+  const [itemsResult, paymentsResult, branchResult, cashierResult] = await Promise.all([
+    supabase
+      .from("order_items")
+      .select("product_id,name,quantity,unit_price,line_total")
+      .eq("tenant_id", auth.tenantId!)
+      .eq("branch_id", auth.branchId!)
+      .eq("order_id", orderId),
+    supabase
+      .from("payments")
+      .select("method,amount,created_at")
+      .eq("tenant_id", auth.tenantId!)
+      .eq("branch_id", auth.branchId!)
+      .eq("order_id", orderId)
+      .order("created_at", { ascending: false }),
+    supabase.from("branches").select("name").eq("tenant_id", auth.tenantId!).eq("id", auth.branchId!).maybeSingle<{ name: string | null }>(),
+    orderRow.created_by
+      ? supabase.from("users_profiles").select("full_name").eq("id", orderRow.created_by).maybeSingle<{ full_name: string | null }>()
+      : Promise.resolve({ data: null, error: null })
+  ]);
+
+  if (itemsResult.error) {
+    throw new Error(itemsResult.error.message);
+  }
+  if (paymentsResult.error) {
+    throw new Error(paymentsResult.error.message);
+  }
+  if (branchResult.error) {
+    throw new Error(branchResult.error.message);
+  }
+  if (cashierResult.error) {
+    throw new Error(cashierResult.error.message);
+  }
+
+  const receiptItems = (itemsResult.data ?? []).map((item) => ({
+    name: String(item.name ?? item.product_id ?? "Item"),
+    qty: Number(item.quantity ?? 0),
+    unit_price: Number(item.unit_price ?? 0),
+    line_total: Number(item.line_total ?? 0)
+  }));
+  const primaryPayment = (paymentsResult.data ?? [])[0] as { method?: string | null } | undefined;
+  const paymentMethod = primaryPayment?.method === "bank_transfer" ? "bank_transfer" : "cash";
+  const totalAmount = Number(orderRow.grand_total ?? orderRow.total_amount ?? 0);
+
+  const receiptPrinters = await getEnabledPrintersByRole(auth, "receipt");
+  const createdJobs: PrintJobRow[] = [];
+
+  for (const printer of receiptPrinters) {
+    const payload = renderReceiptTemplate(
+      {
+        ...receiptStoreTemplateFields(storeProfile),
+        order_id: orderId,
+        order_no: String(orderRow.order_no),
+        branch_name: String(branchResult.data?.name ?? storeProfile?.display_name ?? "Branch POS"),
+        cashier_name: String(cashierResult.data?.full_name ?? orderRow.created_by ?? auth.userId),
+        paid_at_iso: orderRow.payment_completed_at ?? orderRow.created_at ?? nowIso(),
+        currency: "THB",
+        items: receiptItems.length > 0 ? receiptItems : [{ name: "Reprint copy", qty: 1, unit_price: 0, line_total: 0 }],
+        subtotal: Number(orderRow.subtotal ?? orderRow.total_amount ?? 0),
+        discount_amount: Number(orderRow.discount_amount ?? 0),
+        tax_amount: Number(orderRow.tax_total ?? 0),
+        total_amount: totalAmount,
+        payment_method: paymentMethod as PaymentMethod,
+        note: `Reprint for order ${orderRow.order_no}`
+      },
+      printer.paper_width_mm
+    );
+
+    const job = await enqueuePrintJob({
+      auth,
+      printer,
+      orderId,
+      printerRole: "receipt",
+      payloadText: payload,
+      payloadJson: receiptStorePayload(storeProfile),
+      metadata: { reprint: true, ...receiptStorePayload(storeProfile) }
+    });
+    createdJobs.push(job);
+    await processJob(job.id);
+  }
+
+  return {
+    mode: "created_new_job",
+    jobs: createdJobs
+  };
+}
+
+export async function enqueuePrintJobsForOrderSnapshot(args: {
+  auth: AuthContext;
+  order: {
+    id: string;
+    order_no: string;
+    total_amount: number;
+    discount_amount: number;
+    notes?: string | null;
+    customer_name?: string | null;
+  };
+  items: Array<{ product_name: string; quantity: number; unit_price: number; line_total: number; note?: string | null }>;
+  paymentMethod: "cash" | "bank_transfer";
+  includeKitchenTicket: boolean;
+}) {
+  const { auth, order, items, paymentMethod, includeKitchenTicket } = args;
+  const queuedJobs: PrintJobRow[] = [];
+  const storeProfile = await loadReceiptStoreProfile(auth.tenantId!);
+  const branchName = await loadReceiptBranchName(auth, storeProfile?.display_name ?? storeProfile?.name);
+  const receiptPrinters = await getEnabledPrintersByRole(auth, "receipt");
+
+  for (const printer of receiptPrinters) {
+    const receiptPayload = renderReceiptTemplate(
+      {
+        ...receiptStoreTemplateFields(storeProfile),
+        order_id: order.id,
+        order_no: order.order_no,
+        branch_name: branchName,
+        cashier_name: auth.userId,
+        paid_at_iso: nowIso(),
+        currency: "THB",
+        items: items.map((item) => ({
+          name: item.product_name,
+          qty: item.quantity,
+          unit_price: item.unit_price,
+          line_total: item.line_total
+        })),
+        subtotal: order.total_amount + order.discount_amount,
+        discount_amount: order.discount_amount,
+        tax_amount: 0,
+        total_amount: order.total_amount,
+        payment_method: paymentMethod,
+        note: order.notes ?? undefined
+      },
+      printer.paper_width_mm
+    );
+
+    const job = await enqueuePrintJob({
+      auth,
+      printer,
+      orderId: order.id,
+      printerRole: "receipt",
+      payloadText: receiptPayload,
+      payloadJson: { ...receiptStorePayload(storeProfile), branch_name: branchName, order_id: order.id, order_no: order.order_no }
+    });
+    queuedJobs.push(job);
+    await processPrintJob(job.id);
+  }
+
+  if (includeKitchenTicket) {
+    const kitchenPrinters = await getEnabledPrintersByRole(auth, "kitchen");
+    for (const printer of kitchenPrinters) {
+      const kitchenPayload = renderKitchenTicketTemplate(
+        {
+          order_id: order.id,
+          order_no: order.order_no,
+          branch_name: branchName,
+          ticket_at_iso: nowIso(),
+          station: "Main",
+          items: items.map((item) => ({
+            name: item.product_name,
+            qty: item.quantity,
+            note: item.note ?? undefined
+          }))
+        },
+        printer.paper_width_mm
+      );
+
+      const job = await enqueuePrintJob({
+        auth,
+        printer,
+        orderId: order.id,
+        printerRole: "kitchen",
+        payloadText: kitchenPayload
+      });
+      queuedJobs.push(job);
+      await processPrintJob(job.id);
+    }
+  }
+
+  return queuedJobs;
+}
+
+export async function enqueueKitchenTicketForOrderSnapshot(args: {
+  auth: AuthContext;
+  order: {
+    id: string;
+    order_no: string;
+  };
+  items: Array<{ product_name: string; quantity: number; note?: string | null }>;
+  station?: string;
+}) {
+  const { auth, order, items, station = "Table QR" } = args;
+  const queuedJobs: PrintJobRow[] = [];
+  const storeProfile = await loadReceiptStoreProfile(auth.tenantId!);
+  const branchName = await loadReceiptBranchName(auth, storeProfile?.display_name ?? storeProfile?.name);
+  const kitchenPrinters = await getEnabledPrintersByRole(auth, "kitchen");
+
+  for (const printer of kitchenPrinters) {
+    const kitchenPayload = renderKitchenTicketTemplate(
+      {
+        order_id: order.id,
+        order_no: order.order_no,
+        branch_name: branchName,
+        ticket_at_iso: nowIso(),
+        station,
+        items: items.map((item) => ({
+          name: item.product_name,
+          qty: item.quantity,
+          note: item.note ?? undefined
+        }))
+      },
+      printer.paper_width_mm
+    );
+    const job = await enqueuePrintJob({
+      auth,
+      printer,
+      orderId: order.id,
+      printerRole: "kitchen",
+      payloadText: kitchenPayload,
+      metadata: {
+        request_source: "table_qr_order",
+        station
+      }
+    });
+    queuedJobs.push(job);
+    await processPrintJob(job.id);
+  }
+
+  return queuedJobs;
+}

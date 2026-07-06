@@ -1,0 +1,2 @@
+-- RLS policies are maintained in migrations for reproducibility.
+-- Latest: supabase/migrations/202605170002_rls_policies.sql

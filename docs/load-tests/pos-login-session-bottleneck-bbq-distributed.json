@@ -1,0 +1,152 @@
+{
+  "generated_at": "2026-06-04T18:51:50.140Z",
+  "config": {
+    "login_base": "http://localhost:3000",
+    "pos_base": "http://localhost:3000",
+    "store_code": "BBQ-TH-002",
+    "employee_codes": [
+      "182536",
+      "MGR-459509"
+    ],
+    "device_codes": [
+      "BBQ-BKK-01-POS-01",
+      "BBQ-BKK-01-POS-02"
+    ],
+    "branch_code": "BBQ-BKK-01",
+    "seconds": 10,
+    "concurrency": 6,
+    "timeout_ms": 15000,
+    "mode": "distributed",
+    "force_override": true,
+    "verify_pos_session": true
+  },
+  "totals": {
+    "flows": 12,
+    "passed": 4,
+    "failed": 8,
+    "flow_error_rate_pct": 66.67,
+    "throughput_flows_per_sec": 1.2,
+    "flow_latency_ms": {
+      "count": 4,
+      "min": 4281,
+      "p50": 4402,
+      "p95": 7614,
+      "p99": 7614,
+      "max": 7614,
+      "avg": 5957.25
+    }
+  },
+  "bottleneck_indicators": {
+    "device_in_use_conflicts": 7,
+    "session_scope_conflicts": 0,
+    "scope_mismatch_branch": 0,
+    "conflict_share_of_failed_flows_pct": 87.5
+  },
+  "failures": {
+    "device_select:device_in_use": 7,
+    "session_current:session_not_active": 1
+  },
+  "steps": {
+    "store_verify": {
+      "requests": 12,
+      "ok": 12,
+      "failed": 0,
+      "error_rate_pct": 0,
+      "latency_ms": {
+        "count": 12,
+        "min": 483,
+        "p50": 736,
+        "p95": 1177,
+        "p99": 1177,
+        "max": 1177,
+        "avg": 777.75
+      },
+      "status_counts": {
+        "200": 12
+      },
+      "error_codes": {}
+    },
+    "branch_select": {
+      "requests": 12,
+      "ok": 12,
+      "failed": 0,
+      "error_rate_pct": 0,
+      "latency_ms": {
+        "count": 12,
+        "min": 250,
+        "p50": 429,
+        "p95": 1982,
+        "p99": 1982,
+        "max": 1982,
+        "avg": 1004.33
+      },
+      "status_counts": {
+        "200": 12
+      },
+      "error_codes": {}
+    },
+    "employee_verify": {
+      "requests": 12,
+      "ok": 12,
+      "failed": 0,
+      "error_rate_pct": 0,
+      "latency_ms": {
+        "count": 12,
+        "min": 945,
+        "p50": 1125,
+        "p95": 1720,
+        "p99": 1720,
+        "max": 1720,
+        "avg": 1291.33
+      },
+      "status_counts": {
+        "200": 12
+      },
+      "error_codes": {}
+    },
+    "device_select": {
+      "requests": 12,
+      "ok": 5,
+      "failed": 7,
+      "error_rate_pct": 58.33,
+      "latency_ms": {
+        "count": 12,
+        "min": 1621,
+        "p50": 2052,
+        "p95": 2951,
+        "p99": 2951,
+        "max": 2951,
+        "avg": 2274.17
+      },
+      "status_counts": {
+        "200": 5,
+        "409": 7
+      },
+      "error_codes": {
+        "device_in_use": 7
+      }
+    },
+    "session_current": {
+      "requests": 5,
+      "ok": 4,
+      "failed": 1,
+      "error_rate_pct": 20,
+      "latency_ms": {
+        "count": 5,
+        "min": 250,
+        "p50": 400,
+        "p95": 781,
+        "p99": 781,
+        "max": 781,
+        "avg": 514.4
+      },
+      "status_counts": {
+        "200": 4,
+        "401": 1
+      },
+      "error_codes": {
+        "session_not_active": 1
+      }
+    }
+  }
+}

@@ -1,0 +1,116 @@
+# UI Route Structure
+
+Last updated: 2026-05-31
+
+This document reflects routes discovered from the App Router filesystem in:
+- `apps/backoffice-web/src/app`
+
+## Backoffice Web UI routes (`apps/backoffice-web`)
+- `/`
+- `/audit-logs`
+- `/backoffice/settings/printers`
+- `/backoffice/settings/tables`
+- `/dashboard`
+- `/delivery`
+- `/it-admin`
+- `/it-admin/customer-display`
+- `/it-admin/monitoring`
+- `/it-admin/packages`
+- `/it-admin/platform-users`
+- `/it-admin/settings/language`
+- `/it-admin/tenants`
+- `/login`
+- `/login/store`
+- `/login/branches`
+- `/login/employee`
+- `/login/devices`
+- `/orders`
+- `/pos/customer-display`
+- `/pos/monitor`
+- `/pos/orders`
+- `/pos/payments`
+- `/pos/sales`
+- `/pos/shift`
+- `/preview/pos`
+- `/preview/pos/customer-display`
+- `/preview/pos/receipts`
+- `/preview/pos/sales-list`
+- `/preview/pos/sales-summary`
+- `/preview/pos/settings`
+- `/preview/pos/stock`
+- `/preview/pos/tables`
+- `/preview/pos/users`
+- `/reports/audit`
+- `/reports/sales`
+- `/reports/stock`
+- `/settings/language`
+- `/settings/printers`
+- `/settings/promotions`
+- `/settings/tables`
+- `/shifts`
+- `/staff`
+- `/stock`
+- `/tenants`
+- `/tenants/[tenantId]`
+- `/tenants/[tenantId]/branches`
+- `/tenants/[tenantId]/devices`
+- `/tenants/[tenantId]/features`
+- `/tenants/[tenantId]/login-policies`
+- `/tenants/[tenantId]/sessions`
+- `/tenants/[tenantId]/shifts`
+- `/tenants/[tenantId]/users`
+
+## Backoffice Web API route groups
+- `/api/contracts`
+- `/api/auth/branches`
+- `/api/auth/branches/select`
+- `/api/auth/devices`
+- `/api/auth/devices/select`
+- `/api/auth/employee/verify-code`
+- `/api/auth/employee/verify-name`
+- `/api/auth/pin/verify`
+- `/api/auth/register-user/verify`
+- `/api/auth/session/context`
+- `/api/auth/staff-card/verify`
+- `/api/auth/store-code/verify`
+- `/api/admin/pos/*`
+- `/api/backoffice/approvals/*`
+- `/api/backoffice/audit-logs`
+- `/api/backoffice/branch-scope`
+- `/api/backoffice/catalog/*`
+- `/api/backoffice/delivery-pricing`
+- `/api/backoffice/orders/*`
+- `/api/backoffice/printers/*`
+- `/api/backoffice/shifts/*`
+- `/api/backoffice/staff`
+- `/api/backoffice/stock/*`
+- `/api/backoffice/table-layout-objects/*`
+- `/api/backoffice/tables/*`
+- `/api/backoffice/table-zones/*`
+- `/api/it-admin/admin/*`
+- `/api/it-admin/customer-display/*`
+- `/api/it-admin/packages/*`
+- `/api/it-admin/tenants`
+- `/api/pos/attendance/*`
+- `/api/pos/auth/*`
+- `/api/pos/customer-display/*`
+- `/api/pos/monitor`
+- `/api/pos/orders/*`
+- `/api/pos/payments/*`
+- `/api/pos/perf`
+- `/api/pos/products`
+- `/api/pos/receipts/bluetooth`
+- `/api/pos/recipe-products`
+- `/api/pos/sales`
+- `/api/pos/sales-list`
+- `/api/pos/session/current`
+- `/api/pos/system/notice`
+- `/api/pos/shift`
+- `/api/pos/shifts/*`
+- `/api/pos/tables/*`
+- `/api/store/login-context`
+- `/api/store/resolve`
+
+## Notes
+- Route lists in this file are for navigation and system overview.
+- API payload contracts are defined in `/api/contracts` and `packages/shared-types`.

@@ -1,0 +1,215 @@
+{
+  "url": "http://localhost:3000/preview/pos",
+  "generatedAt": "2026-05-25T02:36:05.290Z",
+  "steps": [
+    {
+      "step": "switch_takeaway",
+      "selector": "button:has-text('กลับบ้าน')",
+      "ok": true
+    },
+    {
+      "step": "add_first_product",
+      "selector": ".posui-product-card",
+      "ok": true
+    },
+    {
+      "step": "checkout_submit",
+      "selector": "button:has-text('สร้างออเดอร์ POS')",
+      "ok": true
+    },
+    {
+      "step": "close_payment_modal",
+      "ok": false,
+      "reason": "no matching selector"
+    },
+    {
+      "step": "switch_dine_in",
+      "selector": "button:has-text('นั่งโต๊ะ')",
+      "ok": false,
+      "reason": "locator.click: Timeout 4000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\\'นั่งโต๊ะ\\')').first()\u001b[22m\n\u001b[2m    - locator resolved to <button disabled type=\"button\" class=\"posui-chip posui-chip--quick posui-chip--quick--icon \">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    4 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n"
+    },
+    {
+      "step": "switch_dine_in",
+      "ok": false,
+      "reason": "no matching selector"
+    },
+    {
+      "step": "select_table",
+      "ok": false,
+      "reason": "no matching selector"
+    },
+    {
+      "step": "switch_delivery",
+      "selector": "button:has-text('เดลิเวอรี่')",
+      "ok": false,
+      "reason": "locator.click: Timeout 4000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\\'เดลิเวอรี่\\')').first()\u001b[22m\n\u001b[2m    - locator resolved to <button disabled type=\"button\" class=\"posui-chip posui-chip--quick posui-chip--quick--icon \">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    7 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n"
+    },
+    {
+      "step": "switch_delivery",
+      "ok": false,
+      "reason": "no matching selector"
+    },
+    {
+      "step": "open_delivery_popup",
+      "ok": false,
+      "reason": "no matching selector"
+    }
+  ],
+  "totals": {
+    "api_calls": 13,
+    "status_4xx": 0,
+    "status_409": 0,
+    "status_5xx": 0
+  },
+  "statusSummary": [
+    {
+      "method": "POST",
+      "path": "/api/pos/customer-display",
+      "status": 200,
+      "count": 5,
+      "avg_duration_ms": 793,
+      "p95_duration_ms": 1926
+    },
+    {
+      "method": "POST",
+      "path": "/api/pos/perf",
+      "status": 201,
+      "count": 2,
+      "avg_duration_ms": 1483,
+      "p95_duration_ms": 2801
+    },
+    {
+      "method": "GET",
+      "path": "/api/pos/monitor",
+      "status": 200,
+      "count": 2,
+      "avg_duration_ms": 949.5,
+      "p95_duration_ms": 1860
+    },
+    {
+      "method": "POST",
+      "path": "/api/pos/sales",
+      "status": 201,
+      "count": 1,
+      "avg_duration_ms": 4533,
+      "p95_duration_ms": 4533
+    },
+    {
+      "method": "GET",
+      "path": "/api/pos/sales",
+      "status": 200,
+      "count": 1,
+      "avg_duration_ms": 2651,
+      "p95_duration_ms": 2651
+    },
+    {
+      "method": "GET",
+      "path": "/api/pos/tables",
+      "status": 200,
+      "count": 1,
+      "avg_duration_ms": 798,
+      "p95_duration_ms": 798
+    },
+    {
+      "method": "GET",
+      "path": "/api/pos/recipe-products",
+      "status": 200,
+      "count": 1,
+      "avg_duration_ms": 878,
+      "p95_duration_ms": 878
+    }
+  ],
+  "apiEvents": [
+    {
+      "at": "2026-05-25T02:35:43.992Z",
+      "method": "POST",
+      "path": "/api/pos/perf",
+      "status": 201,
+      "duration_ms": 2801
+    },
+    {
+      "at": "2026-05-25T02:35:45.852Z",
+      "method": "GET",
+      "path": "/api/pos/monitor",
+      "status": 200,
+      "duration_ms": 1860
+    },
+    {
+      "at": "2026-05-25T02:35:45.918Z",
+      "method": "POST",
+      "path": "/api/pos/customer-display",
+      "status": 200,
+      "duration_ms": 1926
+    },
+    {
+      "at": "2026-05-25T02:35:46.643Z",
+      "method": "GET",
+      "path": "/api/pos/sales",
+      "status": 200,
+      "duration_ms": 2651
+    },
+    {
+      "at": "2026-05-25T02:35:47.343Z",
+      "method": "POST",
+      "path": "/api/pos/customer-display",
+      "status": 200,
+      "duration_ms": 415
+    },
+    {
+      "at": "2026-05-25T02:35:47.443Z",
+      "method": "GET",
+      "path": "/api/pos/tables",
+      "status": 200,
+      "duration_ms": 798
+    },
+    {
+      "at": "2026-05-25T02:35:47.689Z",
+      "method": "POST",
+      "path": "/api/pos/perf",
+      "status": 201,
+      "duration_ms": 165
+    },
+    {
+      "at": "2026-05-25T02:35:49.161Z",
+      "method": "POST",
+      "path": "/api/pos/customer-display",
+      "status": 200,
+      "duration_ms": 385
+    },
+    {
+      "at": "2026-05-25T02:35:49.717Z",
+      "method": "POST",
+      "path": "/api/pos/customer-display",
+      "status": 200,
+      "duration_ms": 206
+    },
+    {
+      "at": "2026-05-25T02:35:54.637Z",
+      "method": "POST",
+      "path": "/api/pos/sales",
+      "status": 201,
+      "duration_ms": 4533
+    },
+    {
+      "at": "2026-05-25T02:35:55.727Z",
+      "method": "GET",
+      "path": "/api/pos/recipe-products",
+      "status": 200,
+      "duration_ms": 878
+    },
+    {
+      "at": "2026-05-25T02:35:55.976Z",
+      "method": "POST",
+      "path": "/api/pos/customer-display",
+      "status": 200,
+      "duration_ms": 1033
+    },
+    {
+      "at": "2026-05-25T02:35:58.530Z",
+      "method": "GET",
+      "path": "/api/pos/monitor",
+      "status": 200,
+      "duration_ms": 39
+    }
+  ]
+}

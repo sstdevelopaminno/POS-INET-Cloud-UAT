@@ -1,0 +1,82 @@
+import type { PrinterConnectionType } from "@pos/shared-types";
+import { getAuthContext } from "@/lib/auth-context";
+import { fail, ok } from "@/lib/http";
+import { buildPaginationMeta, parsePagination } from "@/lib/query-params";
+import { createPrinterProfile, listPrinterProfiles } from "@/lib/printing/print-service";
+
+type CreatePrinterPayload = {
+  printer_name: string;
+  printer_role: "receipt" | "kitchen" | "report";
+  connection_type: PrinterConnectionType;
+  ip_address?: string | null;
+  port?: number | null;
+  paper_width_mm: 58 | 80;
+  enabled?: boolean;
+  metadata?: Record<string, unknown>;
+};
+
+export async function GET(req: Request) {
+  try {
+    const auth = await getAuthContext({ requireBranchScope: true });
+    const { searchParams } = new URL(req.url);
+    const { page, pageSize } = parsePagination(searchParams, 10);
+    const all = await listPrinterProfiles(auth);
+
+    const from = Math.max(0, (page - 1) * pageSize);
+    const to = from + pageSize;
+    const items = all.slice(from, to);
+
+    return ok({
+      items,
+      pagination: buildPaginationMeta(page, pageSize, all.length)
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    if (message === "forbidden_role") {
+      return fail("forbidden_role", "Only manager or owner can access printer settings.", 403);
+    }
+    return fail("printer_list_failed", message, 400);
+  }
+}
+
+export async function POST(req: Request) {
+  try {
+    const auth = await getAuthContext({ requireBranchScope: true });
+    const body = (await req.json()) as CreatePrinterPayload;
+
+    if (!body.printer_name?.trim()) {
+      return fail("invalid_printer_name", "printer_name is required.", 422);
+    }
+
+    const created = await createPrinterProfile(auth, {
+      printer_name: body.printer_name,
+      printer_role: body.printer_role,
+      connection_type: body.connection_type,
+      ip_address: body.ip_address ?? null,
+      port: body.port ?? null,
+      paper_width_mm: body.paper_width_mm,
+      enabled: body.enabled ?? true,
+      metadata: body.metadata ?? {}
+    });
+
+    return ok(created, 201);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    if (message === "forbidden_role") {
+      return fail("forbidden_role", "Only manager or owner can create printer settings.", 403);
+    }
+    if (message === "ip_address_required_for_network_esc_pos") {
+      return fail("invalid_ip_address", "NETWORK_ESC_POS requires ip_address.", 422);
+    }
+    if (message === "bluetooth_target_required") {
+      return fail("invalid_bluetooth_target", "BLUETOOTH_BRIDGE requires bluetooth_address or bluetooth_name in metadata.", 422);
+    }
+    if (message === "bluetooth_bridge_url_required") {
+      return fail("invalid_bluetooth_bridge_url", "BLUETOOTH_BRIDGE requires metadata.bridge_url or PRINT_BLUETOOTH_BRIDGE_URL.", 422);
+    }
+    if (message.includes("duplicate key value violates unique constraint")) {
+      return fail("printer_name_conflict", "Printer name already exists in this branch.", 409);
+    }
+    return fail("printer_create_failed", message, 400);
+  }
+}

@@ -1,0 +1,150 @@
+{
+  "generated_at": "2026-05-27T06:55:17.665Z",
+  "config": {
+    "login_base": "http://localhost:3001",
+    "pos_base": "http://localhost:3000",
+    "store_code": "NDL-TH-001",
+    "employee_codes": [
+      "EMP-000101"
+    ],
+    "device_codes": [
+      "POS-AR-001"
+    ],
+    "branch_code": "BKK-02",
+    "seconds": 20,
+    "concurrency": 6,
+    "timeout_ms": 20000,
+    "mode": "conflict",
+    "force_override": false,
+    "verify_pos_session": true
+  },
+  "totals": {
+    "flows": 22,
+    "passed": 7,
+    "failed": 15,
+    "flow_error_rate_pct": 68.18,
+    "throughput_flows_per_sec": 1.1,
+    "flow_latency_ms": {
+      "count": 7,
+      "min": 5375,
+      "p50": 6679,
+      "p95": 8624,
+      "p99": 8624,
+      "max": 8624,
+      "avg": 6691.29
+    }
+  },
+  "bottleneck_indicators": {
+    "device_in_use_conflicts": 7,
+    "session_scope_conflicts": 0,
+    "scope_mismatch_branch": 0,
+    "conflict_share_of_failed_flows_pct": 46.67
+  },
+  "failures": {
+    "session_current:session_not_active": 8,
+    "device_select:device_in_use": 7
+  },
+  "steps": {
+    "store_verify": {
+      "requests": 22,
+      "ok": 22,
+      "failed": 0,
+      "error_rate_pct": 0,
+      "latency_ms": {
+        "count": 22,
+        "min": 698,
+        "p50": 965,
+        "p95": 3030,
+        "p99": 3090,
+        "max": 3090,
+        "avg": 1456.68
+      },
+      "status_counts": {
+        "200": 22
+      },
+      "error_codes": {}
+    },
+    "branch_select": {
+      "requests": 22,
+      "ok": 22,
+      "failed": 0,
+      "error_rate_pct": 0,
+      "latency_ms": {
+        "count": 22,
+        "min": 453,
+        "p50": 498,
+        "p95": 955,
+        "p99": 1182,
+        "max": 1182,
+        "avg": 625.77
+      },
+      "status_counts": {
+        "200": 22
+      },
+      "error_codes": {}
+    },
+    "employee_verify": {
+      "requests": 22,
+      "ok": 22,
+      "failed": 0,
+      "error_rate_pct": 0,
+      "latency_ms": {
+        "count": 22,
+        "min": 1191,
+        "p50": 1553,
+        "p95": 1838,
+        "p99": 1856,
+        "max": 1856,
+        "avg": 1524.05
+      },
+      "status_counts": {
+        "200": 22
+      },
+      "error_codes": {}
+    },
+    "device_select": {
+      "requests": 22,
+      "ok": 15,
+      "failed": 7,
+      "error_rate_pct": 31.82,
+      "latency_ms": {
+        "count": 22,
+        "min": 1647,
+        "p50": 1975,
+        "p95": 2658,
+        "p99": 2714,
+        "max": 2714,
+        "avg": 2033.86
+      },
+      "status_counts": {
+        "200": 15,
+        "409": 7
+      },
+      "error_codes": {
+        "device_in_use": 7
+      }
+    },
+    "session_current": {
+      "requests": 15,
+      "ok": 7,
+      "failed": 8,
+      "error_rate_pct": 53.33,
+      "latency_ms": {
+        "count": 15,
+        "min": 279,
+        "p50": 813,
+        "p95": 2326,
+        "p99": 2326,
+        "max": 2326,
+        "avg": 926.87
+      },
+      "status_counts": {
+        "200": 7,
+        "401": 8
+      },
+      "error_codes": {
+        "session_not_active": 8
+      }
+    }
+  }
+}

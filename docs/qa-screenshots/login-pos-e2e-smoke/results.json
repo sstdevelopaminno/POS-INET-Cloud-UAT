@@ -1,0 +1,195 @@
+{
+  "generatedAt": "2026-06-06T07:14:11.716Z",
+  "config": {
+    "loginBaseUrl": "http://localhost:3000/login/store",
+    "posPreviewUrl": "http://localhost:3000/preview/pos",
+    "storeCode": "NDL-TH-001",
+    "employeeCode": "182536",
+    "preferredBranch": "",
+    "preferredDevice": "",
+    "headless": true
+  },
+  "scenarios": [
+    {
+      "name": "warmup",
+      "result": "passed",
+      "steps": [
+        {
+          "at": "2026-06-06T07:14:14.446Z",
+          "name": "api_store_verify_warmup",
+          "ok": true,
+          "status": 400
+        }
+      ],
+      "errors": []
+    },
+    {
+      "name": "happy_path",
+      "result": "passed",
+      "steps": [
+        {
+          "at": "2026-06-06T07:14:19.299Z",
+          "name": "open_login_store",
+          "ok": true,
+          "url": "http://localhost:3000/login/store"
+        },
+        {
+          "at": "2026-06-06T07:14:21.116Z",
+          "name": "screenshot",
+          "ok": true,
+          "file": "01-login-store.png"
+        },
+        {
+          "at": "2026-06-06T07:14:25.343Z",
+          "name": "api_store_verify",
+          "ok": true,
+          "status": 200
+        },
+        {
+          "at": "2026-06-06T07:14:25.343Z",
+          "name": "submit_store_code",
+          "ok": true,
+          "storeCode": "NDL-TH-001"
+        },
+        {
+          "at": "2026-06-06T07:14:27.304Z",
+          "name": "branch_step_detected",
+          "ok": true
+        },
+        {
+          "at": "2026-06-06T07:14:31.136Z",
+          "name": "confirm_branch_selection",
+          "ok": true
+        },
+        {
+          "at": "2026-06-06T07:14:31.454Z",
+          "name": "screenshot",
+          "ok": true,
+          "file": "02-login-branches.png"
+        },
+        {
+          "at": "2026-06-06T07:14:34.191Z",
+          "name": "api_employee_verify",
+          "ok": true,
+          "status": 200
+        },
+        {
+          "at": "2026-06-06T07:14:34.191Z",
+          "name": "employee_verified_via_code",
+          "ok": true,
+          "employeeCode": "182536"
+        },
+        {
+          "at": "2026-06-06T07:14:34.545Z",
+          "name": "screenshot",
+          "ok": true,
+          "file": "03-login-employee.png"
+        },
+        {
+          "at": "2026-06-06T07:14:36.351Z",
+          "name": "api_devices_after_employee_success",
+          "ok": true,
+          "status": 200,
+          "deviceCount": 3
+        },
+        {
+          "at": "2026-06-06T07:14:38.206Z",
+          "name": "api_device_select_after_employee_success",
+          "ok": true,
+          "status": 200,
+          "deviceCode": "BKK-02-POS-01"
+        },
+        {
+          "at": "2026-06-06T07:14:41.344Z",
+          "name": "redirect_to_pos_preview",
+          "ok": true,
+          "url": "http://localhost:3000/preview/pos"
+        },
+        {
+          "at": "2026-06-06T07:14:42.928Z",
+          "name": "screenshot",
+          "ok": true,
+          "file": "04-pos-preview-gate.png"
+        },
+        {
+          "at": "2026-06-06T07:14:45.727Z",
+          "name": "api_session_current",
+          "ok": true,
+          "status": 200
+        },
+        {
+          "at": "2026-06-06T07:14:46.914Z",
+          "name": "api_shift_current_initial",
+          "ok": true,
+          "status": 200
+        },
+        {
+          "at": "2026-06-06T07:15:24.149Z",
+          "name": "pos_sales_ready",
+          "ok": true,
+          "elapsedMs": 32696
+        },
+        {
+          "at": "2026-06-06T07:15:25.222Z",
+          "name": "screenshot",
+          "ok": true,
+          "file": "05-pos-sales-ready.png"
+        },
+        {
+          "at": "2026-06-06T07:15:30.265Z",
+          "name": "api_products",
+          "ok": true,
+          "status": 200,
+          "productCount": 2
+        }
+      ],
+      "errors": []
+    },
+    {
+      "name": "session_expired_path",
+      "result": "passed",
+      "steps": [
+        {
+          "at": "2026-06-06T07:15:30.321Z",
+          "name": "clear_cookies",
+          "ok": true
+        },
+        {
+          "at": "2026-06-06T07:15:35.524Z",
+          "name": "open_pos_after_cookie_clear",
+          "ok": true,
+          "url": "http://localhost:3000/login/store"
+        },
+        {
+          "at": "2026-06-06T07:15:35.886Z",
+          "name": "api_session_current_after_expire",
+          "ok": true,
+          "status": 401,
+          "code": "missing_pos_session"
+        },
+        {
+          "at": "2026-06-06T07:15:36.009Z",
+          "name": "api_products_after_expire",
+          "ok": true,
+          "status": 401,
+          "code": "missing_pos_session"
+        },
+        {
+          "at": "2026-06-06T07:15:36.101Z",
+          "name": "ui_gate_blocks_access",
+          "ok": true,
+          "productsVisibleCount": 0
+        },
+        {
+          "at": "2026-06-06T07:15:36.702Z",
+          "name": "screenshot",
+          "ok": true,
+          "file": "06-session-expired-gate.png"
+        }
+      ],
+      "errors": []
+    }
+  ],
+  "result": "passed",
+  "errors": []
+}

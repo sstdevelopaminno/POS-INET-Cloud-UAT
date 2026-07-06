@@ -1,0 +1,6 @@
+packages:
+  - apps/backoffice-web
+  - apps/pos-android
+  - packages/*
+
+

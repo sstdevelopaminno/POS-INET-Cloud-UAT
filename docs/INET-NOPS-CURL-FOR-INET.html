@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <title>INET NOPS UAT cURL Details</title>
+    <style>
+      @page {
+        size: A4;
+        margin: 16mm;
+      }
+
+      body {
+        margin: 0;
+        color: #111827;
+        background: #ffffff;
+        font-family: "Tahoma", "Arial", sans-serif;
+        font-size: 12px;
+        line-height: 1.55;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+
+      h1 {
+        margin-bottom: 8px;
+        color: #0f172a;
+        font-size: 22px;
+        line-height: 1.25;
+      }
+
+      h2 {
+        margin: 18px 0 8px;
+        padding-bottom: 4px;
+        border-bottom: 1px solid #dbe4f0;
+        color: #1d4ed8;
+        font-size: 16px;
+      }
+
+      h3 {
+        margin: 14px 0 6px;
+        color: #0f172a;
+        font-size: 13px;
+      }
+
+      code,
+      pre {
+        font-family: "Consolas", "Courier New", monospace;
+      }
+
+      pre {
+        margin: 8px 0 12px;
+        padding: 10px 12px;
+        border: 1px solid #dbe4f0;
+        border-radius: 6px;
+        background: #f8fafc;
+        color: #0f172a;
+        font-size: 10.5px;
+        line-height: 1.45;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+      }
+
+      ul {
+        margin: 6px 0 12px 18px;
+        padding: 0;
+      }
+
+      li {
+        margin: 2px 0;
+      }
+
+      .meta {
+        margin-bottom: 14px;
+        color: #64748b;
+        font-size: 11px;
+      }
+
+      .notice {
+        margin: 12px 0;
+        padding: 10px 12px;
+        border: 1px solid #fecaca;
+        border-radius: 6px;
+        background: #fef2f2;
+        color: #991b1b;
+        font-weight: 700;
+      }
+
+      .safe {
+        margin: 12px 0;
+        padding: 10px 12px;
+        border: 1px solid #bbf7d0;
+        border-radius: 6px;
+        background: #f0fdf4;
+        color: #166534;
+        font-weight: 700;
+      }
+
+      .label {
+        color: #475569;
+        font-weight: 700;
+      }
+
+      .page-break {
+        break-before: page;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>INET NOPS UAT cURL / Body / Path Details</h1>
+    <p class="meta">Prepared for INET support | Date: 2026-06-26 | Project: SST iPOS</p>
+
+    <div class="safe">
+      เอกสารนี้สามารถส่งให้ INET ได้ โดยปิดบังค่า Merchant Key และ Access Token จริงทั้งหมด
+    </div>
+
+    <h2>Current Issue</h2>
+    <p>
+      ระบบ POS เรียก INET UAT ได้ถึงขั้น OAuth และ Access Token แต่ขั้นสุดท้าย Create Payment
+      ถูกตอบกลับเป็น HTTP 403 พร้อม HTML page แทน JSON จึงยังไม่สามารถสร้าง QR ได้
+    </p>
+    <pre>inet_nops_create_payment_http_403:html_response</pre>
+
+    <p>รบกวน INET ช่วยตรวจสอบ:</p>
+    <ul>
+      <li>Merchant Key UAT นี้เปิดสิทธิ์ create-payment QR แล้วหรือยัง</li>
+      <li>ต้อง whitelist IP/domain จาก Vercel หรือไม่</li>
+      <li>Step 3 ต้องใช้ POST JSON body <code>{ "accessToken": "..." }</code> ถูกต้องไหม หรือต้องใช้ method/header/body แบบอื่น</li>
+      <li><code>apUrl</code> ต้องลงทะเบียนหรือ approve ก่อน create-payment หรือไม่</li>
+    </ul>
+
+    <h2>Public POS URLs</h2>
+    <p><span class="label">apUrl / Result page:</span></p>
+    <pre>https://sstipos-ten.vercel.app/payment/inet/result</pre>
+    <p><span class="label">Server-to-server callback URL:</span></p>
+    <pre>https://sstipos-ten.vercel.app/api/payments/inet/callback</pre>
+
+    <h2>Step 1: OAuth</h2>
+    <p><span class="label">Method:</span> POST</p>
+    <p><span class="label">Path / URL:</span></p>
+    <pre>https://new-ops-poc.inet.co.th/uat/oauth/api/v1/oauth-token</pre>
+    <p><span class="label">Body:</span></p>
+    <pre>{
+  "key": "&lt;INET_UAT_MERCHANT_KEY&gt;",
+  "orderId": "SST260626110606ABCDEF123456789"
+}</pre>
+    <p><span class="label">cURL:</span></p>
+    <pre>curl -i -X POST "https://new-ops-poc.inet.co.th/uat/oauth/api/v1/oauth-token" \
+  -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  --data '{
+    "key": "&lt;INET_UAT_MERCHANT_KEY&gt;",
+    "orderId": "SST260626110606ABCDEF123456789"
+  }'</pre>
+    <p><span class="label">Expected response:</span></p>
+    <pre>{
+  "code": 201,
+  "token": "&lt;OAUTH_TOKEN&gt;"
+}</pre>
+
+    <div class="page-break"></div>
+
+    <h2>Step 2: Access Token</h2>
+    <p><span class="label">Method:</span> POST</p>
+    <p><span class="label">Path / URL:</span></p>
+    <pre>https://new-ops-poc.inet.co.th/uat/api/v1/sandbox/payment-transactions/access-token</pre>
+    <p><span class="label">Body:</span></p>
+    <pre>{
+  "key": "&lt;INET_UAT_MERCHANT_KEY&gt;",
+  "orderId": "SST260626110606ABCDEF123456789",
+  "orderDesc": "POS TEST-BILL",
+  "amount": 125,
+  "apUrl": "https://sstipos-ten.vercel.app/payment/inet/result",
+  "payType": "QR",
+  "regRef": ""
+}</pre>
+    <p><span class="label">cURL:</span></p>
+    <pre>curl -i -X POST "https://new-ops-poc.inet.co.th/uat/api/v1/sandbox/payment-transactions/access-token" \
+  -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer &lt;OAUTH_TOKEN&gt;" \
+  --data '{
+    "key": "&lt;INET_UAT_MERCHANT_KEY&gt;",
+    "orderId": "SST260626110606ABCDEF123456789",
+    "orderDesc": "POS TEST-BILL",
+    "amount": 125,
+    "apUrl": "https://sstipos-ten.vercel.app/payment/inet/result",
+    "payType": "QR",
+    "regRef": ""
+  }'</pre>
+    <p><span class="label">Expected response:</span></p>
+    <pre>{
+  "code": 201,
+  "accessToken": "&lt;PAYMENT_ACCESS_TOKEN&gt;",
+  "link": "&lt;CREATE_PAYMENT_LINK&gt;"
+}</pre>
+
+    <h2>Step 3: Create Payment</h2>
+    <p><span class="label">Method currently used by POS:</span> POST</p>
+    <p><span class="label">Path / URL:</span></p>
+    <pre>&lt;CREATE_PAYMENT_LINK returned from Step 2&gt;</pre>
+    <p><span class="label">Body:</span></p>
+    <pre>{
+  "accessToken": "&lt;PAYMENT_ACCESS_TOKEN&gt;"
+}</pre>
+    <p><span class="label">cURL:</span></p>
+    <pre>curl -i -X POST "&lt;CREATE_PAYMENT_LINK&gt;" \
+  -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  --data '{
+    "accessToken": "&lt;PAYMENT_ACCESS_TOKEN&gt;"
+  }'</pre>
+    <p><span class="label">Expected response:</span></p>
+    <pre>{
+  "code": 200,
+  "qrCode": "&lt;BASE64_QR_IMAGE&gt;"
+}</pre>
+    <div class="notice">
+      Actual current result: HTTP 403, Content-Type: text/html
+    </div>
+
+    <h2>POS Order ID Format</h2>
+    <p>ระบบ POS สร้าง provider order ID ความยาวไม่เกิน 30 ตัวอักษร:</p>
+    <pre>SST + YYMMDDHHMMSS + 15 random uppercase hex characters</pre>
+    <p>ตัวอย่าง:</p>
+    <pre>SST260626110606ABCDEF123456789</pre>
+
+    <h2>Notes</h2>
+    <ul>
+      <li>Merchant Key เป็น server-only และไม่ส่งไป browser</li>
+      <li>ปุ่มทดสอบ UAT ในหน้าตั้งค่าทดสอบเฉพาะ OAuth เท่านั้น</li>
+      <li>การสร้าง QR จริงต้องผ่านทั้ง 3 ขั้นตอนด้านบน</li>
+      <li>บิลจะปิดอัตโนมัติหลัง INET ส่ง callback สำเร็จด้วย <code>event=payment_status_change</code> และ <code>detail.response_code=0</code></li>
+    </ul>
+  </body>
+</html>

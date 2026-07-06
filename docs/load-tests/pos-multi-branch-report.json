@@ -1,0 +1,80 @@
+{
+  "generated_at": "2026-05-24T10:59:34.987Z",
+  "base_url": "http://localhost:3000",
+  "duration_seconds": 30,
+  "concurrency": 20,
+  "request_timeout_ms": 12000,
+  "totals": {
+    "requests": 379,
+    "ok": 359,
+    "failed": 20,
+    "error_rate_pct": 5.28,
+    "throughput_rps": 12.63,
+    "latency_ms": {
+      "count": 379,
+      "min": 27,
+      "p50": 707,
+      "p95": 12001,
+      "p99": 12019,
+      "max": 12030,
+      "avg": 1593.1
+    }
+  },
+  "scenarios": {
+    "branch_monitor": {
+      "requests": 157,
+      "ok": 157,
+      "failed": 0,
+      "error_rate_pct": 0,
+      "latency_ms": {
+        "count": 157,
+        "min": 27,
+        "p50": 699,
+        "p95": 1970,
+        "p99": 2482,
+        "max": 2567,
+        "avg": 805.54
+      },
+      "status_counts": {
+        "200": 157
+      }
+    },
+    "table_snapshot": {
+      "requests": 130,
+      "ok": 130,
+      "failed": 0,
+      "error_rate_pct": 0,
+      "latency_ms": {
+        "count": 130,
+        "min": 30,
+        "p50": 676,
+        "p95": 1919,
+        "p99": 2118,
+        "max": 2269,
+        "avg": 843.8
+      },
+      "status_counts": {
+        "200": 130
+      }
+    },
+    "tenant_monitor": {
+      "requests": 92,
+      "ok": 72,
+      "failed": 20,
+      "error_rate_pct": 21.74,
+      "latency_ms": {
+        "count": 92,
+        "min": 171,
+        "p50": 1059,
+        "p95": 12012,
+        "p99": 12030,
+        "max": 12030,
+        "avg": 3995.89
+      },
+      "status_counts": {
+        "0": 20,
+        "200": 72
+      }
+    }
+  }
+}

@@ -1,0 +1,260 @@
+{
+  "generatedAt": "2026-05-31T11:18:36.787Z",
+  "base": {
+    "loginUrl": "http://localhost:3000/login/store",
+    "posUrl": "http://localhost:3000/preview/pos",
+    "storeCode": "NDL-TH-001"
+  },
+  "roles": [
+    {
+      "input": {
+        "label": "staff",
+        "code": "EMP-000103"
+      },
+      "resolvedRole": null,
+      "loginOk": false,
+      "menu": {
+        "expected": [],
+        "visible": [],
+        "pass": false,
+        "missing": [],
+        "unexpected": []
+      },
+      "api": {},
+      "pass": false,
+      "errors": [
+        "device_select_failed status=409 body={\"data\":null,\"error\":{\"code\":\"device_in_use\",\"message\":\"เครื่องนี้กำลังถูกใช้งานอยู่\"}}"
+      ]
+    },
+    {
+      "input": {
+        "label": "manager",
+        "code": "EMP-000102"
+      },
+      "resolvedRole": "manager",
+      "loginOk": true,
+      "menu": {
+        "expected": [
+          "/preview/pos",
+          "/preview/pos/sales-list",
+          "/preview/pos/stock",
+          "/preview/pos/sales-summary",
+          "/preview/pos/receipts",
+          "/preview/pos/tables",
+          "/preview/pos/customer-display",
+          "/preview/pos/users",
+          "/preview/pos/settings"
+        ],
+        "visible": [
+          "/preview/pos",
+          "/preview/pos/sales-list",
+          "/preview/pos/stock",
+          "/preview/pos/sales-summary",
+          "/preview/pos/receipts",
+          "/preview/pos/tables",
+          "/preview/pos/customer-display",
+          "/preview/pos/users",
+          "/preview/pos/settings"
+        ],
+        "pass": true,
+        "missing": [],
+        "unexpected": []
+      },
+      "api": {
+        "/api/pos/sales": {
+          "expectedStatus": [
+            200
+          ],
+          "actualStatus": 200,
+          "ok": true,
+          "errorCode": null
+        },
+        "/api/pos/sales-list": {
+          "expectedStatus": [
+            200
+          ],
+          "actualStatus": 200,
+          "ok": true,
+          "errorCode": null
+        },
+        "/api/pos/products": {
+          "expectedStatus": [
+            200
+          ],
+          "actualStatus": 200,
+          "ok": true,
+          "errorCode": null
+        },
+        "/api/pos/orders/current-shift": {
+          "expectedStatus": [
+            200
+          ],
+          "actualStatus": 200,
+          "ok": true,
+          "errorCode": null
+        },
+        "/api/pos/tables": {
+          "expectedStatus": [
+            200
+          ],
+          "actualStatus": 200,
+          "ok": true,
+          "errorCode": null
+        },
+        "/api/pos/monitor": {
+          "expectedStatus": [
+            200
+          ],
+          "actualStatus": 200,
+          "ok": true,
+          "errorCode": null
+        },
+        "/api/pos/customer-display": {
+          "expectedStatus": [
+            200
+          ],
+          "actualStatus": 200,
+          "ok": true,
+          "errorCode": null
+        },
+        "/api/pos/system/notice": {
+          "expectedStatus": [
+            200
+          ],
+          "actualStatus": 200,
+          "ok": true,
+          "errorCode": null
+        },
+        "/api/pos/attendance/status": {
+          "expectedStatus": [
+            200,
+            403
+          ],
+          "actualStatus": 403,
+          "ok": true,
+          "errorCode": "feature_not_enabled"
+        }
+      },
+      "pass": true,
+      "errors": []
+    },
+    {
+      "input": {
+        "label": "owner",
+        "code": "EMP-000101"
+      },
+      "resolvedRole": "owner",
+      "loginOk": true,
+      "menu": {
+        "expected": [
+          "/preview/pos",
+          "/preview/pos/sales-list",
+          "/preview/pos/stock",
+          "/preview/pos/sales-summary",
+          "/preview/pos/receipts",
+          "/preview/pos/tables",
+          "/preview/pos/customer-display",
+          "/preview/pos/users",
+          "/preview/pos/settings"
+        ],
+        "visible": [
+          "/preview/pos",
+          "/preview/pos/sales-list",
+          "/preview/pos/stock",
+          "/preview/pos/sales-summary",
+          "/preview/pos/receipts",
+          "/preview/pos/tables",
+          "/preview/pos/customer-display",
+          "/preview/pos/users",
+          "/preview/pos/settings"
+        ],
+        "pass": true,
+        "missing": [],
+        "unexpected": []
+      },
+      "api": {
+        "/api/pos/sales": {
+          "expectedStatus": [
+            200
+          ],
+          "actualStatus": 200,
+          "ok": true,
+          "errorCode": null
+        },
+        "/api/pos/sales-list": {
+          "expectedStatus": [
+            200
+          ],
+          "actualStatus": 200,
+          "ok": true,
+          "errorCode": null
+        },
+        "/api/pos/products": {
+          "expectedStatus": [
+            200
+          ],
+          "actualStatus": 200,
+          "ok": true,
+          "errorCode": null
+        },
+        "/api/pos/orders/current-shift": {
+          "expectedStatus": [
+            200
+          ],
+          "actualStatus": 200,
+          "ok": true,
+          "errorCode": null
+        },
+        "/api/pos/tables": {
+          "expectedStatus": [
+            200
+          ],
+          "actualStatus": 200,
+          "ok": true,
+          "errorCode": null
+        },
+        "/api/pos/monitor": {
+          "expectedStatus": [
+            200
+          ],
+          "actualStatus": 200,
+          "ok": true,
+          "errorCode": null
+        },
+        "/api/pos/customer-display": {
+          "expectedStatus": [
+            200
+          ],
+          "actualStatus": 200,
+          "ok": true,
+          "errorCode": null
+        },
+        "/api/pos/system/notice": {
+          "expectedStatus": [
+            200
+          ],
+          "actualStatus": 200,
+          "ok": true,
+          "errorCode": null
+        },
+        "/api/pos/attendance/status": {
+          "expectedStatus": [
+            200,
+            403
+          ],
+          "actualStatus": 403,
+          "ok": true,
+          "errorCode": "feature_not_enabled"
+        }
+      },
+      "pass": true,
+      "errors": []
+    }
+  ],
+  "summary": {
+    "pass": false,
+    "total": 3,
+    "passed": 2,
+    "failed": 1
+  }
+}

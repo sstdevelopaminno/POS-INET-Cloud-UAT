@@ -1,0 +1,654 @@
+[
+  {
+    "viewport": "mobile",
+    "screen": "backoffice-preview-pos",
+    "url": "https://pos-preview-phi.vercel.app/preview/pos",
+    "screenshot": "docs/qa-screenshots/mobile/backoffice-preview-pos.png",
+    "metrics": {
+      "hasOverflow": false,
+      "overflowPx": 0,
+      "touchTargets": {
+        "total": 26,
+        "smallCount": 0,
+        "samples": []
+      },
+      "modals": {
+        "visibleCount": 0,
+        "issues": []
+      },
+      "keyboardLayout": {
+        "beforeOverflowPx": 0,
+        "afterOverflowPx": 0,
+        "brokenByFocus": false
+      },
+      "tables": {
+        "count": 0,
+        "scrollIssues": 0
+      },
+      "cartSidebar": {
+        "found": true,
+        "horizontallyVisible": true,
+        "width": 340
+      },
+      "pinModalPresent": false,
+      "pinModalFitsViewport": false,
+      "pinModalCheck": {
+        "opened": true,
+        "fitsViewport": true
+      }
+    }
+  },
+  {
+    "viewport": "mobile",
+    "screen": "backoffice-dashboard",
+    "url": "https://pos-preview-phi.vercel.app/dashboard",
+    "screenshot": "docs/qa-screenshots/mobile/backoffice-dashboard.png",
+    "metrics": {
+      "hasOverflow": false,
+      "overflowPx": 0,
+      "touchTargets": {
+        "total": 11,
+        "smallCount": 0,
+        "samples": []
+      },
+      "modals": {
+        "visibleCount": 0,
+        "issues": []
+      },
+      "keyboardLayout": {
+        "beforeOverflowPx": 0,
+        "afterOverflowPx": 0,
+        "brokenByFocus": false
+      },
+      "tables": {
+        "count": 0,
+        "scrollIssues": 0
+      },
+      "cartSidebar": null,
+      "pinModalPresent": false,
+      "pinModalFitsViewport": false
+    }
+  },
+  {
+    "viewport": "mobile",
+    "screen": "backoffice-it-admin",
+    "url": "https://pos-preview-phi.vercel.app/it-admin",
+    "screenshot": "docs/qa-screenshots/mobile/backoffice-it-admin.png",
+    "metrics": {
+      "hasOverflow": false,
+      "overflowPx": 0,
+      "touchTargets": {
+        "total": 7,
+        "smallCount": 0,
+        "samples": []
+      },
+      "modals": {
+        "visibleCount": 0,
+        "issues": []
+      },
+      "keyboardLayout": {
+        "beforeOverflowPx": 0,
+        "afterOverflowPx": 0,
+        "brokenByFocus": false
+      },
+      "tables": {
+        "count": 0,
+        "scrollIssues": 0
+      },
+      "cartSidebar": null,
+      "pinModalPresent": false,
+      "pinModalFitsViewport": false
+    }
+  },
+  {
+    "viewport": "mobile",
+    "screen": "qr-home",
+    "url": "https://qr-pos-preview.vercel.app/",
+    "screenshot": "docs/qa-screenshots/mobile/qr-home.png",
+    "metrics": {
+      "hasOverflow": false,
+      "overflowPx": 0,
+      "touchTargets": {
+        "total": 1,
+        "smallCount": 0,
+        "samples": []
+      },
+      "modals": {
+        "visibleCount": 0,
+        "issues": []
+      },
+      "keyboardLayout": {
+        "beforeOverflowPx": 0,
+        "afterOverflowPx": 0,
+        "brokenByFocus": false
+      },
+      "tables": {
+        "count": 0,
+        "scrollIssues": 0
+      },
+      "cartSidebar": null,
+      "pinModalPresent": false,
+      "pinModalFitsViewport": false
+    }
+  },
+  {
+    "viewport": "mobile",
+    "screen": "qr-scan",
+    "url": "https://qr-pos-preview.vercel.app/scan",
+    "screenshot": "docs/qa-screenshots/mobile/qr-scan.png",
+    "metrics": {
+      "hasOverflow": false,
+      "overflowPx": 0,
+      "touchTargets": {
+        "total": 3,
+        "smallCount": 0,
+        "samples": []
+      },
+      "modals": {
+        "visibleCount": 0,
+        "issues": []
+      },
+      "keyboardLayout": {
+        "beforeOverflowPx": 0,
+        "afterOverflowPx": 0,
+        "brokenByFocus": false
+      },
+      "tables": {
+        "count": 0,
+        "scrollIssues": 0
+      },
+      "cartSidebar": null,
+      "pinModalPresent": false,
+      "pinModalFitsViewport": false
+    }
+  },
+  {
+    "viewport": "tablet-portrait",
+    "screen": "backoffice-preview-pos",
+    "url": "https://pos-preview-phi.vercel.app/preview/pos",
+    "screenshot": "docs/qa-screenshots/tablet-portrait/backoffice-preview-pos.png",
+    "metrics": {
+      "hasOverflow": false,
+      "overflowPx": 0,
+      "touchTargets": {
+        "total": 26,
+        "smallCount": 0,
+        "samples": []
+      },
+      "modals": {
+        "visibleCount": 0,
+        "issues": []
+      },
+      "keyboardLayout": {
+        "beforeOverflowPx": 0,
+        "afterOverflowPx": 0,
+        "brokenByFocus": false
+      },
+      "tables": {
+        "count": 0,
+        "scrollIssues": 0
+      },
+      "cartSidebar": {
+        "found": true,
+        "horizontallyVisible": true,
+        "width": 718
+      },
+      "pinModalPresent": false,
+      "pinModalFitsViewport": false,
+      "pinModalCheck": {
+        "opened": true,
+        "fitsViewport": true
+      }
+    }
+  },
+  {
+    "viewport": "tablet-portrait",
+    "screen": "backoffice-dashboard",
+    "url": "https://pos-preview-phi.vercel.app/dashboard",
+    "screenshot": "docs/qa-screenshots/tablet-portrait/backoffice-dashboard.png",
+    "metrics": {
+      "hasOverflow": false,
+      "overflowPx": 0,
+      "touchTargets": {
+        "total": 11,
+        "smallCount": 0,
+        "samples": []
+      },
+      "modals": {
+        "visibleCount": 0,
+        "issues": []
+      },
+      "keyboardLayout": {
+        "beforeOverflowPx": 0,
+        "afterOverflowPx": 0,
+        "brokenByFocus": false
+      },
+      "tables": {
+        "count": 0,
+        "scrollIssues": 0
+      },
+      "cartSidebar": null,
+      "pinModalPresent": false,
+      "pinModalFitsViewport": false
+    }
+  },
+  {
+    "viewport": "tablet-portrait",
+    "screen": "backoffice-it-admin",
+    "url": "https://pos-preview-phi.vercel.app/it-admin",
+    "screenshot": "docs/qa-screenshots/tablet-portrait/backoffice-it-admin.png",
+    "metrics": {
+      "hasOverflow": false,
+      "overflowPx": 0,
+      "touchTargets": {
+        "total": 7,
+        "smallCount": 0,
+        "samples": []
+      },
+      "modals": {
+        "visibleCount": 0,
+        "issues": []
+      },
+      "keyboardLayout": {
+        "beforeOverflowPx": 0,
+        "afterOverflowPx": 0,
+        "brokenByFocus": false
+      },
+      "tables": {
+        "count": 0,
+        "scrollIssues": 0
+      },
+      "cartSidebar": null,
+      "pinModalPresent": false,
+      "pinModalFitsViewport": false
+    }
+  },
+  {
+    "viewport": "tablet-portrait",
+    "screen": "qr-home",
+    "url": "https://qr-pos-preview.vercel.app/",
+    "screenshot": "docs/qa-screenshots/tablet-portrait/qr-home.png",
+    "metrics": {
+      "hasOverflow": false,
+      "overflowPx": 0,
+      "touchTargets": {
+        "total": 1,
+        "smallCount": 0,
+        "samples": []
+      },
+      "modals": {
+        "visibleCount": 0,
+        "issues": []
+      },
+      "keyboardLayout": {
+        "beforeOverflowPx": 0,
+        "afterOverflowPx": 0,
+        "brokenByFocus": false
+      },
+      "tables": {
+        "count": 0,
+        "scrollIssues": 0
+      },
+      "cartSidebar": null,
+      "pinModalPresent": false,
+      "pinModalFitsViewport": false
+    }
+  },
+  {
+    "viewport": "tablet-portrait",
+    "screen": "qr-scan",
+    "url": "https://qr-pos-preview.vercel.app/scan",
+    "screenshot": "docs/qa-screenshots/tablet-portrait/qr-scan.png",
+    "metrics": {
+      "hasOverflow": false,
+      "overflowPx": 0,
+      "touchTargets": {
+        "total": 3,
+        "smallCount": 0,
+        "samples": []
+      },
+      "modals": {
+        "visibleCount": 0,
+        "issues": []
+      },
+      "keyboardLayout": {
+        "beforeOverflowPx": 0,
+        "afterOverflowPx": 0,
+        "brokenByFocus": false
+      },
+      "tables": {
+        "count": 0,
+        "scrollIssues": 0
+      },
+      "cartSidebar": null,
+      "pinModalPresent": false,
+      "pinModalFitsViewport": false
+    }
+  },
+  {
+    "viewport": "tablet-landscape",
+    "screen": "backoffice-preview-pos",
+    "url": "https://pos-preview-phi.vercel.app/preview/pos",
+    "screenshot": "docs/qa-screenshots/tablet-landscape/backoffice-preview-pos.png",
+    "metrics": {
+      "hasOverflow": false,
+      "overflowPx": 0,
+      "touchTargets": {
+        "total": 26,
+        "smallCount": 0,
+        "samples": []
+      },
+      "modals": {
+        "visibleCount": 0,
+        "issues": []
+      },
+      "keyboardLayout": {
+        "beforeOverflowPx": 0,
+        "afterOverflowPx": 0,
+        "brokenByFocus": false
+      },
+      "tables": {
+        "count": 0,
+        "scrollIssues": 0
+      },
+      "cartSidebar": {
+        "found": true,
+        "horizontallyVisible": true,
+        "width": 423
+      },
+      "pinModalPresent": false,
+      "pinModalFitsViewport": false,
+      "pinModalCheck": {
+        "opened": true,
+        "fitsViewport": true
+      }
+    }
+  },
+  {
+    "viewport": "tablet-landscape",
+    "screen": "backoffice-dashboard",
+    "url": "https://pos-preview-phi.vercel.app/dashboard",
+    "screenshot": "docs/qa-screenshots/tablet-landscape/backoffice-dashboard.png",
+    "metrics": {
+      "hasOverflow": false,
+      "overflowPx": 0,
+      "touchTargets": {
+        "total": 11,
+        "smallCount": 0,
+        "samples": []
+      },
+      "modals": {
+        "visibleCount": 0,
+        "issues": []
+      },
+      "keyboardLayout": {
+        "beforeOverflowPx": 0,
+        "afterOverflowPx": 0,
+        "brokenByFocus": false
+      },
+      "tables": {
+        "count": 0,
+        "scrollIssues": 0
+      },
+      "cartSidebar": null,
+      "pinModalPresent": false,
+      "pinModalFitsViewport": false
+    }
+  },
+  {
+    "viewport": "tablet-landscape",
+    "screen": "backoffice-it-admin",
+    "url": "https://pos-preview-phi.vercel.app/it-admin",
+    "screenshot": "docs/qa-screenshots/tablet-landscape/backoffice-it-admin.png",
+    "metrics": {
+      "hasOverflow": false,
+      "overflowPx": 0,
+      "touchTargets": {
+        "total": 7,
+        "smallCount": 0,
+        "samples": []
+      },
+      "modals": {
+        "visibleCount": 0,
+        "issues": []
+      },
+      "keyboardLayout": {
+        "beforeOverflowPx": 0,
+        "afterOverflowPx": 0,
+        "brokenByFocus": false
+      },
+      "tables": {
+        "count": 0,
+        "scrollIssues": 0
+      },
+      "cartSidebar": null,
+      "pinModalPresent": false,
+      "pinModalFitsViewport": false
+    }
+  },
+  {
+    "viewport": "tablet-landscape",
+    "screen": "qr-home",
+    "url": "https://qr-pos-preview.vercel.app/",
+    "screenshot": "docs/qa-screenshots/tablet-landscape/qr-home.png",
+    "metrics": {
+      "hasOverflow": false,
+      "overflowPx": 0,
+      "touchTargets": {
+        "total": 1,
+        "smallCount": 0,
+        "samples": []
+      },
+      "modals": {
+        "visibleCount": 0,
+        "issues": []
+      },
+      "keyboardLayout": {
+        "beforeOverflowPx": 0,
+        "afterOverflowPx": 0,
+        "brokenByFocus": false
+      },
+      "tables": {
+        "count": 0,
+        "scrollIssues": 0
+      },
+      "cartSidebar": null,
+      "pinModalPresent": false,
+      "pinModalFitsViewport": false
+    }
+  },
+  {
+    "viewport": "tablet-landscape",
+    "screen": "qr-scan",
+    "url": "https://qr-pos-preview.vercel.app/scan",
+    "screenshot": "docs/qa-screenshots/tablet-landscape/qr-scan.png",
+    "metrics": {
+      "hasOverflow": false,
+      "overflowPx": 0,
+      "touchTargets": {
+        "total": 3,
+        "smallCount": 0,
+        "samples": []
+      },
+      "modals": {
+        "visibleCount": 0,
+        "issues": []
+      },
+      "keyboardLayout": {
+        "beforeOverflowPx": 0,
+        "afterOverflowPx": 0,
+        "brokenByFocus": false
+      },
+      "tables": {
+        "count": 0,
+        "scrollIssues": 0
+      },
+      "cartSidebar": null,
+      "pinModalPresent": false,
+      "pinModalFitsViewport": false
+    }
+  },
+  {
+    "viewport": "desktop",
+    "screen": "backoffice-preview-pos",
+    "url": "https://pos-preview-phi.vercel.app/preview/pos",
+    "screenshot": "docs/qa-screenshots/desktop/backoffice-preview-pos.png",
+    "metrics": {
+      "hasOverflow": false,
+      "overflowPx": 0,
+      "touchTargets": {
+        "total": 26,
+        "smallCount": 0,
+        "samples": []
+      },
+      "modals": {
+        "visibleCount": 0,
+        "issues": []
+      },
+      "keyboardLayout": {
+        "beforeOverflowPx": 0,
+        "afterOverflowPx": 0,
+        "brokenByFocus": false
+      },
+      "tables": {
+        "count": 0,
+        "scrollIssues": 0
+      },
+      "cartSidebar": {
+        "found": true,
+        "horizontallyVisible": true,
+        "width": 500
+      },
+      "pinModalPresent": false,
+      "pinModalFitsViewport": false,
+      "pinModalCheck": {
+        "opened": true,
+        "fitsViewport": true
+      }
+    }
+  },
+  {
+    "viewport": "desktop",
+    "screen": "backoffice-dashboard",
+    "url": "https://pos-preview-phi.vercel.app/dashboard",
+    "screenshot": "docs/qa-screenshots/desktop/backoffice-dashboard.png",
+    "metrics": {
+      "hasOverflow": false,
+      "overflowPx": 0,
+      "touchTargets": {
+        "total": 11,
+        "smallCount": 0,
+        "samples": []
+      },
+      "modals": {
+        "visibleCount": 0,
+        "issues": []
+      },
+      "keyboardLayout": {
+        "beforeOverflowPx": 0,
+        "afterOverflowPx": 0,
+        "brokenByFocus": false
+      },
+      "tables": {
+        "count": 0,
+        "scrollIssues": 0
+      },
+      "cartSidebar": null,
+      "pinModalPresent": false,
+      "pinModalFitsViewport": false
+    }
+  },
+  {
+    "viewport": "desktop",
+    "screen": "backoffice-it-admin",
+    "url": "https://pos-preview-phi.vercel.app/it-admin",
+    "screenshot": "docs/qa-screenshots/desktop/backoffice-it-admin.png",
+    "metrics": {
+      "hasOverflow": false,
+      "overflowPx": 0,
+      "touchTargets": {
+        "total": 7,
+        "smallCount": 0,
+        "samples": []
+      },
+      "modals": {
+        "visibleCount": 0,
+        "issues": []
+      },
+      "keyboardLayout": {
+        "beforeOverflowPx": 0,
+        "afterOverflowPx": 0,
+        "brokenByFocus": false
+      },
+      "tables": {
+        "count": 0,
+        "scrollIssues": 0
+      },
+      "cartSidebar": null,
+      "pinModalPresent": false,
+      "pinModalFitsViewport": false
+    }
+  },
+  {
+    "viewport": "desktop",
+    "screen": "qr-home",
+    "url": "https://qr-pos-preview.vercel.app/",
+    "screenshot": "docs/qa-screenshots/desktop/qr-home.png",
+    "metrics": {
+      "hasOverflow": false,
+      "overflowPx": 0,
+      "touchTargets": {
+        "total": 1,
+        "smallCount": 0,
+        "samples": []
+      },
+      "modals": {
+        "visibleCount": 0,
+        "issues": []
+      },
+      "keyboardLayout": {
+        "beforeOverflowPx": 0,
+        "afterOverflowPx": 0,
+        "brokenByFocus": false
+      },
+      "tables": {
+        "count": 0,
+        "scrollIssues": 0
+      },
+      "cartSidebar": null,
+      "pinModalPresent": false,
+      "pinModalFitsViewport": false
+    }
+  },
+  {
+    "viewport": "desktop",
+    "screen": "qr-scan",
+    "url": "https://qr-pos-preview.vercel.app/scan",
+    "screenshot": "docs/qa-screenshots/desktop/qr-scan.png",
+    "metrics": {
+      "hasOverflow": false,
+      "overflowPx": 0,
+      "touchTargets": {
+        "total": 3,
+        "smallCount": 0,
+        "samples": []
+      },
+      "modals": {
+        "visibleCount": 0,
+        "issues": []
+      },
+      "keyboardLayout": {
+        "beforeOverflowPx": 0,
+        "afterOverflowPx": 0,
+        "brokenByFocus": false
+      },
+      "tables": {
+        "count": 0,
+        "scrollIssues": 0
+      },
+      "cartSidebar": null,
+      "pinModalPresent": false,
+      "pinModalFitsViewport": false
+    }
+  }
+]

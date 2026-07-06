@@ -1,0 +1,97 @@
+INET NOPS - Reply After INET Could Not Find Logs
+Date: 2026-06-30
+Project: POS Preview / SST iPOS
+
+This file is safe to send to INET support.
+No Merchant Key, token, or secret value is included.
+
+============================================================
+MESSAGE TO INET
+============================================================
+
+เรียน INET,
+
+ทางเราตรวจสอบแล้วครับ
+
+IP ที่ส่งให้ก่อนหน้านี้:
+
+216.198.79.67
+64.29.17.67
+216.198.79.195
+64.29.17.195
+
+เป็น IP ที่ DNS resolve ได้จาก domain/deployment ของ Vercel สำหรับฝั่งเข้าเว็บ
+หรือ edge/inbound IP ไม่ใช่ IP ต้นทางจริงที่ serverless function ใช้ยิง API
+ออกไปหา INET
+
+ดังนั้นถ้าทีม INET ตรวจ log จาก 4 IP นี้แล้วไม่พบ log ถือว่าสอดคล้องครับ
+เพราะ IP ชุดนี้ไม่ใช่ fixed outbound source IP ของ request POS -> INET
+
+สถานะปัจจุบัน:
+
+ระบบ POS Preview อยู่บน Vercel serverless และยังไม่ได้เปิดใช้งาน Static
+Outbound IP / Static IPs ดังนั้นตอนนี้เรายังไม่มี fixed outbound source IP
+ที่ยืนยันให้ INET allowlist ได้อย่างถูกต้อง
+
+หาก INET ต้องการ allowlist ด้วย source IP จริง ทางเราต้องดำเนินการอย่างใด
+อย่างหนึ่งก่อน:
+
+1. เปิดใช้งาน Vercel Static IPs ให้โปรเจกต์นี้ แล้วส่ง IP คงที่ที่ Vercel
+   assign มาให้ INET
+
+หรือ
+
+2. route request ไปหา INET ผ่าน fixed outbound proxy / NAT gateway แล้วส่ง
+   public IP ของ proxy/NAT ให้ INET
+
+ถ้า INET สามารถ allowlist ด้วย domain ได้ รบกวน allow:
+
+sstipos-ten.vercel.app
+
+Public URLs:
+
+Result page / apUrl:
+https://sstipos-ten.vercel.app/payment/inet/result
+
+Callback URL:
+https://sstipos-ten.vercel.app/api/payments/inet/callback
+
+Current note:
+กรุณาอย่าใช้ IP 4 ตัวด้านบนเป็น source IP สำหรับ allowlist เพราะเป็น
+Vercel edge/inbound IP ไม่ใช่ outbound source IP
+
+============================================================
+TECHNICAL SUMMARY
+============================================================
+
+Hosting provider:
+Vercel
+
+Production domain:
+https://sstipos-ten.vercel.app
+
+Deployment domain recently inspected:
+https://sstipos-yyzef1vu0-sstdevelopaminnos-projects.vercel.app
+
+Vercel region shown in deployment:
+iad1
+
+Known issue:
+The POS can reach INET OAuth and access-token steps, but the create-payment
+step returned:
+
+inet_nops_create_payment_http_403:html_response
+
+Previous IP list was based on DNS A records only and is now marked as not
+suitable for source-IP allowlisting.
+
+============================================================
+FOLLOW-UP FILE FOR REAL SOURCE IP
+============================================================
+
+The current real outbound source IP status and the required Vercel Static IP
+action are documented here:
+
+docs/INET-NOPS-REAL-SOURCE-IP-FOR-INET.txt
+
+Do not treat DNS/edge/inbound IP addresses as final source IPs.

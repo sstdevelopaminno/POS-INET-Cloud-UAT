@@ -1,0 +1,31 @@
+{
+  "name": "pos-platform",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@10.33.4",
+  "engines": {
+    "node": ">=22 <25"
+  },
+  "scripts": {
+    "dev": "corepack pnpm --filter backoffice-web dev",
+    "dev:pos": "node -e \"console.log('POS Preview: http://localhost:3000/preview/pos')\" && corepack pnpm --filter backoffice-web dev",
+    "cf:preview:backoffice": "corepack pnpm --filter backoffice-web cf:preview",
+    "cf:deploy:backoffice": "corepack pnpm --filter backoffice-web cf:deploy",
+    "qa:login-bridge": "node scripts/login-pos-bridge-smoke.mjs",
+    "qa:login-bottleneck-load": "node scripts/pos-login-session-bottleneck-load-test.mjs",
+    "qa:seed-health": "node scripts/seed-health-check.mjs",
+    "build": "corepack pnpm --filter backoffice-web build",
+    "build:turbo": "corepack pnpm --filter backoffice-web build",
+    "lint": "corepack pnpm --filter backoffice-web lint",
+    "typecheck": "corepack pnpm --filter backoffice-web typecheck",
+    "test": "corepack pnpm --filter backoffice-web test"
+  },
+  "dependencies": {
+    "next": "^16.2.5"
+  },
+  "devDependencies": {
+    "playwright": "1.55.0",
+    "turbo": "^2.0.12",
+    "typescript": "^5.8.3"
+  }
+}

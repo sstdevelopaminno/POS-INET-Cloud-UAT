@@ -1,0 +1,56 @@
+{
+  "generatedAt": "2026-05-28T05:50:18.983Z",
+  "config": {
+    "baseUrl": "http://localhost:3001",
+    "storeCode": "NDL-TH-001",
+    "fullName": "เจ้าของร้าน",
+    "usernames": [
+      "EMP-000101",
+      "EMP-000102",
+      "EMP-000103"
+    ],
+    "headless": true
+  },
+  "checks": {
+    "qrScanUi": {
+      "ok": true,
+      "details": "storeLabel=true, userLabel=true, registerLink=true"
+    },
+    "registerUi": {
+      "ok": true,
+      "details": "storeLabel=true, nameLabel=true, usernameLabel=true"
+    },
+    "devServiceWorkerState": {
+      "ok": true,
+      "details": "{\"hasSwApi\":true,\"registrations\":0,\"controlled\":false}"
+    }
+  },
+  "users": [
+    {
+      "username": "EMP-000101",
+      "statusCode": 200,
+      "apiSuccess": true,
+      "uiSuccess": true,
+      "routeAfterSubmit": "http://localhost:3001/qr-scan",
+      "errorCode": null
+    },
+    {
+      "username": "EMP-000102",
+      "statusCode": 200,
+      "apiSuccess": true,
+      "uiSuccess": true,
+      "routeAfterSubmit": "http://localhost:3001/qr-scan",
+      "errorCode": null
+    },
+    {
+      "username": "EMP-000103",
+      "statusCode": 200,
+      "apiSuccess": true,
+      "uiSuccess": true,
+      "routeAfterSubmit": "http://localhost:3001/qr-scan",
+      "errorCode": null
+    }
+  ],
+  "result": "passed",
+  "errors": []
+}

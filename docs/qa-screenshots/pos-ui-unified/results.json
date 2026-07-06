@@ -1,0 +1,382 @@
+{
+  "url": "http://localhost:3000/preview/pos",
+  "generatedAt": "2026-05-25T02:28:15.844Z",
+  "results": [
+    {
+      "viewport": "desktop-1440x900",
+      "width": 1440,
+      "height": 900,
+      "screenshot": "docs/qa-screenshots/pos-ui-unified/desktop-1440x900.png",
+      "metrics": {
+        "hasOverflow": false,
+        "overflowPx": 0,
+        "smallTargetCount": 14,
+        "smallTargetSamples": [
+          {
+            "tag": "button",
+            "text": "",
+            "width": 34,
+            "height": 34
+          },
+          {
+            "tag": "a",
+            "text": "หน้าขาย",
+            "width": 171,
+            "height": 40
+          },
+          {
+            "tag": "a",
+            "text": "รายการขาย",
+            "width": 171,
+            "height": 40
+          },
+          {
+            "tag": "a",
+            "text": "จัดการสินค้า",
+            "width": 171,
+            "height": 40
+          },
+          {
+            "tag": "a",
+            "text": "สรุปยอดขาย",
+            "width": 171,
+            "height": 40
+          },
+          {
+            "tag": "a",
+            "text": "ใบเสร็จย้อนหลัง",
+            "width": 171,
+            "height": 40
+          },
+          {
+            "tag": "a",
+            "text": "จัดการโต๊ะ",
+            "width": 171,
+            "height": 40
+          },
+          {
+            "tag": "a",
+            "text": "จอลูกค้า",
+            "width": 171,
+            "height": 40
+          }
+        ],
+        "modalIssues": []
+      }
+    },
+    {
+      "viewport": "laptop-1366x768",
+      "width": 1366,
+      "height": 768,
+      "screenshot": "docs/qa-screenshots/pos-ui-unified/laptop-1366x768.png",
+      "metrics": {
+        "hasOverflow": false,
+        "overflowPx": 0,
+        "smallTargetCount": 14,
+        "smallTargetSamples": [
+          {
+            "tag": "button",
+            "text": "",
+            "width": 34,
+            "height": 34
+          },
+          {
+            "tag": "a",
+            "text": "หน้าขาย",
+            "width": 171,
+            "height": 40
+          },
+          {
+            "tag": "a",
+            "text": "รายการขาย",
+            "width": 171,
+            "height": 40
+          },
+          {
+            "tag": "a",
+            "text": "จัดการสินค้า",
+            "width": 171,
+            "height": 40
+          },
+          {
+            "tag": "a",
+            "text": "สรุปยอดขาย",
+            "width": 171,
+            "height": 40
+          },
+          {
+            "tag": "a",
+            "text": "ใบเสร็จย้อนหลัง",
+            "width": 171,
+            "height": 40
+          },
+          {
+            "tag": "a",
+            "text": "จัดการโต๊ะ",
+            "width": 171,
+            "height": 40
+          },
+          {
+            "tag": "a",
+            "text": "จอลูกค้า",
+            "width": 171,
+            "height": 40
+          }
+        ],
+        "modalIssues": []
+      }
+    },
+    {
+      "viewport": "ipad-landscape-1180x820",
+      "width": 1180,
+      "height": 820,
+      "screenshot": "docs/qa-screenshots/pos-ui-unified/ipad-landscape-1180x820.png",
+      "metrics": {
+        "hasOverflow": false,
+        "overflowPx": 0,
+        "smallTargetCount": 14,
+        "smallTargetSamples": [
+          {
+            "tag": "button",
+            "text": "",
+            "width": 34,
+            "height": 34
+          },
+          {
+            "tag": "a",
+            "text": "หน้าขาย",
+            "width": 171,
+            "height": 40
+          },
+          {
+            "tag": "a",
+            "text": "รายการขาย",
+            "width": 171,
+            "height": 40
+          },
+          {
+            "tag": "a",
+            "text": "จัดการสินค้า",
+            "width": 171,
+            "height": 40
+          },
+          {
+            "tag": "a",
+            "text": "สรุปยอดขาย",
+            "width": 171,
+            "height": 40
+          },
+          {
+            "tag": "a",
+            "text": "ใบเสร็จย้อนหลัง",
+            "width": 171,
+            "height": 40
+          },
+          {
+            "tag": "a",
+            "text": "จัดการโต๊ะ",
+            "width": 171,
+            "height": 40
+          },
+          {
+            "tag": "a",
+            "text": "จอลูกค้า",
+            "width": 171,
+            "height": 40
+          }
+        ],
+        "modalIssues": []
+      }
+    },
+    {
+      "viewport": "ipad-portrait-820x1180",
+      "width": 820,
+      "height": 1180,
+      "screenshot": "docs/qa-screenshots/pos-ui-unified/ipad-portrait-820x1180.png",
+      "metrics": {
+        "hasOverflow": false,
+        "overflowPx": 0,
+        "smallTargetCount": 3,
+        "smallTargetSamples": [
+          {
+            "tag": "button",
+            "text": "พักบิล: 0",
+            "width": 67,
+            "height": 32
+          },
+          {
+            "tag": "button",
+            "text": "จอลูกค้า",
+            "width": 65,
+            "height": 32
+          },
+          {
+            "tag": "button",
+            "text": "จัดการเมนู",
+            "width": 85,
+            "height": 35
+          }
+        ],
+        "modalIssues": []
+      }
+    },
+    {
+      "viewport": "android-tablet-landscape-1280x800",
+      "width": 1280,
+      "height": 800,
+      "screenshot": "docs/qa-screenshots/pos-ui-unified/android-tablet-landscape-1280x800.png",
+      "metrics": {
+        "hasOverflow": false,
+        "overflowPx": 0,
+        "smallTargetCount": 14,
+        "smallTargetSamples": [
+          {
+            "tag": "button",
+            "text": "",
+            "width": 34,
+            "height": 34
+          },
+          {
+            "tag": "a",
+            "text": "หน้าขาย",
+            "width": 171,
+            "height": 40
+          },
+          {
+            "tag": "a",
+            "text": "รายการขาย",
+            "width": 171,
+            "height": 40
+          },
+          {
+            "tag": "a",
+            "text": "จัดการสินค้า",
+            "width": 171,
+            "height": 40
+          },
+          {
+            "tag": "a",
+            "text": "สรุปยอดขาย",
+            "width": 171,
+            "height": 40
+          },
+          {
+            "tag": "a",
+            "text": "ใบเสร็จย้อนหลัง",
+            "width": 171,
+            "height": 40
+          },
+          {
+            "tag": "a",
+            "text": "จัดการโต๊ะ",
+            "width": 171,
+            "height": 40
+          },
+          {
+            "tag": "a",
+            "text": "จอลูกค้า",
+            "width": 171,
+            "height": 40
+          }
+        ],
+        "modalIssues": []
+      }
+    },
+    {
+      "viewport": "android-tablet-portrait-800x1280",
+      "width": 800,
+      "height": 1280,
+      "screenshot": "docs/qa-screenshots/pos-ui-unified/android-tablet-portrait-800x1280.png",
+      "metrics": {
+        "hasOverflow": false,
+        "overflowPx": 0,
+        "smallTargetCount": 3,
+        "smallTargetSamples": [
+          {
+            "tag": "button",
+            "text": "พักบิล: 0",
+            "width": 67,
+            "height": 32
+          },
+          {
+            "tag": "button",
+            "text": "จอลูกค้า",
+            "width": 65,
+            "height": 32
+          },
+          {
+            "tag": "button",
+            "text": "จัดการเมนู",
+            "width": 85,
+            "height": 35
+          }
+        ],
+        "modalIssues": []
+      }
+    },
+    {
+      "viewport": "mobile-portrait-390x844",
+      "width": 390,
+      "height": 844,
+      "screenshot": "docs/qa-screenshots/pos-ui-unified/mobile-portrait-390x844.png",
+      "metrics": {
+        "hasOverflow": false,
+        "overflowPx": 0,
+        "smallTargetCount": 3,
+        "smallTargetSamples": [
+          {
+            "tag": "button",
+            "text": "พักบิล: 0",
+            "width": 67,
+            "height": 32
+          },
+          {
+            "tag": "button",
+            "text": "จอลูกค้า",
+            "width": 65,
+            "height": 32
+          },
+          {
+            "tag": "button",
+            "text": "จัดการเมนู",
+            "width": 85,
+            "height": 35
+          }
+        ],
+        "modalIssues": []
+      }
+    },
+    {
+      "viewport": "mobile-landscape-844x390",
+      "width": 844,
+      "height": 390,
+      "screenshot": "docs/qa-screenshots/pos-ui-unified/mobile-landscape-844x390.png",
+      "metrics": {
+        "hasOverflow": false,
+        "overflowPx": 0,
+        "smallTargetCount": 3,
+        "smallTargetSamples": [
+          {
+            "tag": "button",
+            "text": "พักบิล: 0",
+            "width": 67,
+            "height": 32
+          },
+          {
+            "tag": "button",
+            "text": "จอลูกค้า",
+            "width": 65,
+            "height": 32
+          },
+          {
+            "tag": "button",
+            "text": "จัดการเมนู",
+            "width": 85,
+            "height": 35
+          }
+        ],
+        "modalIssues": []
+      }
+    }
+  ]
+}

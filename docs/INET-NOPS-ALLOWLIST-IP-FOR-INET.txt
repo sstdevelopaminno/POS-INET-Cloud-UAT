@@ -1,0 +1,225 @@
+INET NOPS UAT - IP / Allowlist Details For INET
+Prepared for INET support
+Updated: 2026-06-29
+Project: POS Preview / SST iPOS
+
+This file is safe to send to INET support.
+No Merchant Key, token, or secret value is included.
+
+============================================================
+UPDATE AFTER INET LOG CHECK - 2026-06-30
+============================================================
+
+INET reported that they could not find logs for the four IP addresses
+previously provided:
+
+- 216.198.79.67
+- 64.29.17.67
+- 216.198.79.195
+- 64.29.17.195
+
+This is expected and indicates that our earlier IP list was not suitable
+for source-IP allowlisting. Those four IP addresses are DNS/edge/inbound
+addresses for the Vercel-hosted domain/deployment, not guaranteed outbound
+source IPs used by the serverless function when it calls INET.
+
+Corrected statement:
+
+At this time, POS Preview does not have a fixed outbound source IP to give
+to INET. To provide a source IP that INET can reliably allowlist, we must
+first enable Vercel Static IPs for this project or route INET API calls
+through a fixed outbound proxy/NAT gateway.
+
+Please do not use the four DNS/edge IP addresses above for INET source-IP
+log lookup or allowlisting.
+
+============================================================
+SHORT ANSWER FOR INET
+============================================================
+
+The POS Preview production system is deployed on Vercel.
+
+Production domain:
+https://sstipos-ten.vercel.app
+
+Current Vercel project:
+sstipos
+
+Current production deployment inspected:
+dpl_BMDaz5w95WYr5uHhcLK3w2LS1N3b
+
+Current production deployment domain inspected:
+https://sstipos-yyzef1vu0-sstdevelopaminnos-projects.vercel.app
+
+Current Vercel function/build region shown by Vercel:
+iad1
+
+Region note:
+iad1 is outside Thailand.
+
+Current DNS A records resolved for production domain on 2026-06-29:
+
+sstipos-ten.vercel.app
+- 216.198.79.67
+- 64.29.17.67
+
+Current DNS A records resolved for current deployment domain on 2026-06-29:
+
+sstipos-yyzef1vu0-sstdevelopaminnos-projects.vercel.app
+- 216.198.79.195
+- 64.29.17.195
+
+Important:
+At this time, we cannot provide a single fixed outbound source IP address
+for requests from the POS server to INET, because the project is currently
+running on standard Vercel serverless infrastructure.
+
+For IP allowlisting, the correct option is one of these:
+
+1. Enable Vercel Static IPs for this project and then provide INET with
+   the assigned static outbound IP pair from Vercel Project Settings.
+
+2. Route INET API calls through a fixed outbound proxy / NAT gateway,
+   then provide INET with that proxy/NAT public IP.
+
+Please do not allowlist the DNS/IP of https://sstipos-ten.vercel.app as
+the outbound source IP. That domain is for inbound traffic to the POS app
+through Vercel's edge/CDN and is not the same as the server-side outbound
+egress IP used when POS calls INET.
+
+If INET needs an inbound server/domain reference, use:
+
+Domain:
+sstipos-ten.vercel.app
+
+Currently resolved A records:
+216.198.79.67
+64.29.17.67
+
+If INET needs the outbound source IP for POS-to-INET API calls, the values
+above are not sufficient. A fixed outbound IP must be assigned first through
+Vercel Static IPs or a fixed outbound proxy/NAT.
+
+============================================================
+THAI MESSAGE TO SEND TO INET
+============================================================
+
+เรียน INET,
+
+ระบบ POS Preview ที่ยิง API ไปหา INET อยู่บน Vercel และ deployment ปัจจุบัน
+แสดง region เป็น iad1 ซึ่งอยู่นอกประเทศไทย
+
+Production domain:
+https://sstipos-ten.vercel.app
+
+Deployment ที่ตรวจล่าสุด:
+dpl_BMDaz5w95WYr5uHhcLK3w2LS1N3b
+
+DNS A record ของ production domain ที่ resolve ได้ ณ วันที่ 2026-06-29:
+216.198.79.67
+64.29.17.67
+
+อย่างไรก็ตาม IP ด้านบนเป็น IP ฝั่ง domain/edge สำหรับการเข้าถึงเว็บ ไม่สามารถยืนยันได้ว่าเป็น
+outbound source IP ที่ server ใช้ยิง API ไปหา INET เพราะระบบรันบน Vercel serverless
+ซึ่งยังไม่ได้เปิดใช้งาน Static Outbound IP
+
+หากทาง INET ต้อง allowlist ด้วย source IP จริง รบกวนยืนยันว่าต้องใช้ fixed outbound IP เท่านั้น
+ทางเราจะต้องเปิด Vercel Static IPs หรือทำ fixed outbound proxy/NAT ก่อน แล้วจึงส่ง IP ที่แน่นอนให้ได้
+
+หากทาง INET สามารถ allowlist ด้วย domain ได้ รบกวน allow:
+sstipos-ten.vercel.app
+
+Callback URL:
+https://sstipos-ten.vercel.app/api/payments/inet/callback
+
+Result page / apUrl:
+https://sstipos-ten.vercel.app/payment/inet/result
+
+============================================================
+PUBLIC URLS TO REGISTER / CONFIRM WITH INET
+============================================================
+
+Result page / apUrl:
+https://sstipos-ten.vercel.app/payment/inet/result
+
+Server-to-server callback URL:
+https://sstipos-ten.vercel.app/api/payments/inet/callback
+
+If INET allows by domain instead of IP, please allow:
+sstipos-ten.vercel.app
+
+============================================================
+OUTBOUND REQUESTS FROM POS TO INET
+============================================================
+
+The POS server calls INET UAT using these URLs:
+
+1. OAuth
+POST https://new-ops-poc.inet.co.th/uat/oauth/api/v1/oauth-token
+
+2. Access Token
+POST https://new-ops-poc.inet.co.th/uat/api/v1/sandbox/payment-transactions/access-token
+
+3. Create Payment
+POST <CREATE_PAYMENT_LINK returned by Step 2>
+
+Current failure:
+
+Step 1 OAuth passes.
+Step 2 Access Token passes.
+Step 3 Create Payment returns:
+
+HTTP 403
+Content-Type: text/html
+
+POS error:
+inet_nops_create_payment_http_403:html_response
+
+============================================================
+CURRENT REQUEST TO INET
+============================================================
+
+Please confirm which allowlist method INET requires:
+
+1. Can INET allowlist by domain?
+   Domain:
+   sstipos-ten.vercel.app
+
+2. If INET requires source IP only, please confirm that a fixed outbound
+   IP is mandatory. We will need to enable Vercel Static IPs or add a fixed
+   outbound proxy/NAT first, then send the final assigned public IP(s).
+
+3. Please confirm whether the 403 on Step 3 is caused by:
+   - missing source IP allowlist,
+   - unapproved apUrl domain,
+   - UAT Merchant Key not enabled for QR create-payment,
+   - or a different required method/header/body for Step 3.
+
+============================================================
+VERCEL STATIC IP NOTE
+============================================================
+
+Vercel Static IPs are for outbound egress traffic from deployments.
+After Static IPs are enabled for the Vercel project, Vercel provides
+static outbound IP pairs that can be shared with external services for
+allowlisting.
+
+Until Static IPs or another fixed egress route is enabled, the production
+POS server does not have a guaranteed single public outbound IP address
+that is safe to give to INET for long-term allowlisting.
+
+============================================================
+FILES WITH FULL CURL / BODY / PATH DETAILS
+============================================================
+
+Full text details:
+docs/INET-NOPS-CURL-FOR-INET.txt
+
+PDF version:
+docs/INET-NOPS-CURL-FOR-INET.pdf
+
+Handoff note:
+docs/INET-NOPS-WAITING-FOR-INET-HANDOFF.md
+
+Real outbound source IP status / next action:
+docs/INET-NOPS-REAL-SOURCE-IP-FOR-INET.txt

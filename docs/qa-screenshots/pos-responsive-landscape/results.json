@@ -1,0 +1,473 @@
+{
+  "generatedAt": "2026-06-02T16:48:22.099Z",
+  "posUrl": "http://localhost:3000/preview/pos",
+  "results": [
+    {
+      "viewport": {
+        "key": "tablet-1024x768",
+        "width": 1024,
+        "height": 768,
+        "isMobile": true,
+        "hasTouch": true,
+        "expectGuard": false
+      },
+      "loadMs": 5670,
+      "navigationMs": null,
+      "screenshot": "docs/qa-screenshots/pos-responsive-landscape/tablet-1024x768.png",
+      "metrics": {
+        "url": "http://localhost:3000/preview/pos",
+        "title": "POS Platform Back Office",
+        "posRootPresent": true,
+        "guardVisible": false,
+        "overflowPx": 0,
+        "hasHorizontalOverflow": false,
+        "interactiveCount": 4,
+        "smallTargetCount": 1,
+        "smallTargetSamples": [
+          {
+            "tag": "button",
+            "text": "",
+            "width": 34,
+            "height": 34
+          }
+        ],
+        "cartVisible": false
+      },
+      "pass": true
+    },
+    {
+      "viewport": {
+        "key": "ipad-1180x820",
+        "width": 1180,
+        "height": 820,
+        "isMobile": true,
+        "hasTouch": true,
+        "expectGuard": false
+      },
+      "loadMs": 22734,
+      "navigationMs": null,
+      "screenshot": "docs/qa-screenshots/pos-responsive-landscape/ipad-1180x820.png",
+      "metrics": {
+        "url": "http://localhost:3000/preview/pos",
+        "title": "POS Platform Back Office",
+        "posRootPresent": true,
+        "guardVisible": false,
+        "overflowPx": 0,
+        "hasHorizontalOverflow": false,
+        "interactiveCount": 4,
+        "smallTargetCount": 1,
+        "smallTargetSamples": [
+          {
+            "tag": "button",
+            "text": "",
+            "width": 34,
+            "height": 34
+          }
+        ],
+        "cartVisible": false
+      },
+      "pass": true
+    },
+    {
+      "viewport": {
+        "key": "ipad-1194x834",
+        "width": 1194,
+        "height": 834,
+        "isMobile": true,
+        "hasTouch": true,
+        "expectGuard": false
+      },
+      "loadMs": 10709,
+      "navigationMs": null,
+      "screenshot": "docs/qa-screenshots/pos-responsive-landscape/ipad-1194x834.png",
+      "metrics": {
+        "url": "http://localhost:3000/preview/pos",
+        "title": "POS Platform Back Office",
+        "posRootPresent": true,
+        "guardVisible": false,
+        "overflowPx": 0,
+        "hasHorizontalOverflow": false,
+        "interactiveCount": 4,
+        "smallTargetCount": 1,
+        "smallTargetSamples": [
+          {
+            "tag": "button",
+            "text": "",
+            "width": 34,
+            "height": 34
+          }
+        ],
+        "cartVisible": false
+      },
+      "pass": true
+    },
+    {
+      "viewport": {
+        "key": "ipad-pro-1366x1024",
+        "width": 1366,
+        "height": 1024,
+        "isMobile": true,
+        "hasTouch": true,
+        "expectGuard": false
+      },
+      "loadMs": 3353,
+      "navigationMs": null,
+      "screenshot": "docs/qa-screenshots/pos-responsive-landscape/ipad-pro-1366x1024.png",
+      "metrics": {
+        "url": "http://localhost:3000/preview/pos",
+        "title": "POS Platform Back Office",
+        "posRootPresent": true,
+        "guardVisible": false,
+        "overflowPx": 0,
+        "hasHorizontalOverflow": false,
+        "interactiveCount": 4,
+        "smallTargetCount": 1,
+        "smallTargetSamples": [
+          {
+            "tag": "button",
+            "text": "",
+            "width": 34,
+            "height": 34
+          }
+        ],
+        "cartVisible": false
+      },
+      "pass": true
+    },
+    {
+      "viewport": {
+        "key": "laptop-1280x720",
+        "width": 1280,
+        "height": 720,
+        "isMobile": false,
+        "hasTouch": false,
+        "expectGuard": false
+      },
+      "loadMs": 3443,
+      "navigationMs": null,
+      "screenshot": "docs/qa-screenshots/pos-responsive-landscape/laptop-1280x720.png",
+      "metrics": {
+        "url": "http://localhost:3000/preview/pos",
+        "title": "POS Platform Back Office",
+        "posRootPresent": true,
+        "guardVisible": false,
+        "overflowPx": 0,
+        "hasHorizontalOverflow": false,
+        "interactiveCount": 4,
+        "smallTargetCount": 1,
+        "smallTargetSamples": [
+          {
+            "tag": "button",
+            "text": "",
+            "width": 34,
+            "height": 34
+          }
+        ],
+        "cartVisible": false
+      },
+      "pass": true
+    },
+    {
+      "viewport": {
+        "key": "laptop-1366x768",
+        "width": 1366,
+        "height": 768,
+        "isMobile": false,
+        "hasTouch": false,
+        "expectGuard": false
+      },
+      "loadMs": 3230,
+      "navigationMs": null,
+      "screenshot": "docs/qa-screenshots/pos-responsive-landscape/laptop-1366x768.png",
+      "metrics": {
+        "url": "http://localhost:3000/preview/pos",
+        "title": "POS Platform Back Office",
+        "posRootPresent": true,
+        "guardVisible": false,
+        "overflowPx": 0,
+        "hasHorizontalOverflow": false,
+        "interactiveCount": 4,
+        "smallTargetCount": 1,
+        "smallTargetSamples": [
+          {
+            "tag": "button",
+            "text": "",
+            "width": 34,
+            "height": 34
+          }
+        ],
+        "cartVisible": false
+      },
+      "pass": true
+    },
+    {
+      "viewport": {
+        "key": "desktop-1440x900",
+        "width": 1440,
+        "height": 900,
+        "isMobile": false,
+        "hasTouch": false,
+        "expectGuard": false
+      },
+      "loadMs": 2802,
+      "navigationMs": null,
+      "screenshot": "docs/qa-screenshots/pos-responsive-landscape/desktop-1440x900.png",
+      "metrics": {
+        "url": "http://localhost:3000/preview/pos",
+        "title": "POS Platform Back Office",
+        "posRootPresent": true,
+        "guardVisible": false,
+        "overflowPx": 0,
+        "hasHorizontalOverflow": false,
+        "interactiveCount": 4,
+        "smallTargetCount": 1,
+        "smallTargetSamples": [
+          {
+            "tag": "button",
+            "text": "",
+            "width": 34,
+            "height": 34
+          }
+        ],
+        "cartVisible": false
+      },
+      "pass": true
+    },
+    {
+      "viewport": {
+        "key": "desktop-1536x864",
+        "width": 1536,
+        "height": 864,
+        "isMobile": false,
+        "hasTouch": false,
+        "expectGuard": false
+      },
+      "loadMs": 4533,
+      "navigationMs": null,
+      "screenshot": "docs/qa-screenshots/pos-responsive-landscape/desktop-1536x864.png",
+      "metrics": {
+        "url": "http://localhost:3000/preview/pos",
+        "title": "POS Platform Back Office",
+        "posRootPresent": true,
+        "guardVisible": false,
+        "overflowPx": 0,
+        "hasHorizontalOverflow": false,
+        "interactiveCount": 4,
+        "smallTargetCount": 1,
+        "smallTargetSamples": [
+          {
+            "tag": "button",
+            "text": "",
+            "width": 34,
+            "height": 34
+          }
+        ],
+        "cartVisible": false
+      },
+      "pass": true
+    },
+    {
+      "viewport": {
+        "key": "desktop-1600x900",
+        "width": 1600,
+        "height": 900,
+        "isMobile": false,
+        "hasTouch": false,
+        "expectGuard": false
+      },
+      "loadMs": 3482,
+      "navigationMs": null,
+      "screenshot": "docs/qa-screenshots/pos-responsive-landscape/desktop-1600x900.png",
+      "metrics": {
+        "url": "http://localhost:3000/preview/pos",
+        "title": "POS Platform Back Office",
+        "posRootPresent": true,
+        "guardVisible": false,
+        "overflowPx": 0,
+        "hasHorizontalOverflow": false,
+        "interactiveCount": 4,
+        "smallTargetCount": 1,
+        "smallTargetSamples": [
+          {
+            "tag": "button",
+            "text": "",
+            "width": 34,
+            "height": 34
+          }
+        ],
+        "cartVisible": false
+      },
+      "pass": true
+    },
+    {
+      "viewport": {
+        "key": "desktop-1920x1080",
+        "width": 1920,
+        "height": 1080,
+        "isMobile": false,
+        "hasTouch": false,
+        "expectGuard": false
+      },
+      "loadMs": 2716,
+      "navigationMs": null,
+      "screenshot": "docs/qa-screenshots/pos-responsive-landscape/desktop-1920x1080.png",
+      "metrics": {
+        "url": "http://localhost:3000/preview/pos",
+        "title": "POS Platform Back Office",
+        "posRootPresent": true,
+        "guardVisible": false,
+        "overflowPx": 0,
+        "hasHorizontalOverflow": false,
+        "interactiveCount": 4,
+        "smallTargetCount": 1,
+        "smallTargetSamples": [
+          {
+            "tag": "button",
+            "text": "",
+            "width": 34,
+            "height": 34
+          }
+        ],
+        "cartVisible": false
+      },
+      "pass": true
+    },
+    {
+      "viewport": {
+        "key": "large-2560x1440",
+        "width": 2560,
+        "height": 1440,
+        "isMobile": false,
+        "hasTouch": false,
+        "expectGuard": false
+      },
+      "loadMs": 2599,
+      "navigationMs": null,
+      "screenshot": "docs/qa-screenshots/pos-responsive-landscape/large-2560x1440.png",
+      "metrics": {
+        "url": "http://localhost:3000/preview/pos",
+        "title": "POS Platform Back Office",
+        "posRootPresent": true,
+        "guardVisible": false,
+        "overflowPx": 0,
+        "hasHorizontalOverflow": false,
+        "interactiveCount": 4,
+        "smallTargetCount": 1,
+        "smallTargetSamples": [
+          {
+            "tag": "button",
+            "text": "",
+            "width": 34,
+            "height": 34
+          }
+        ],
+        "cartVisible": false
+      },
+      "pass": true
+    },
+    {
+      "viewport": {
+        "key": "mobile-390x844",
+        "width": 390,
+        "height": 844,
+        "isMobile": true,
+        "hasTouch": true,
+        "expectGuard": true
+      },
+      "loadMs": 8865,
+      "navigationMs": null,
+      "screenshot": "docs/qa-screenshots/pos-responsive-landscape/mobile-390x844.png",
+      "metrics": {
+        "url": "http://localhost:3000/preview/pos",
+        "title": "POS Platform Back Office",
+        "posRootPresent": true,
+        "guardVisible": true,
+        "overflowPx": 0,
+        "hasHorizontalOverflow": false,
+        "interactiveCount": 2,
+        "smallTargetCount": 0,
+        "smallTargetSamples": [],
+        "cartVisible": false
+      },
+      "pass": true
+    },
+    {
+      "viewport": {
+        "key": "mobile-430x932",
+        "width": 430,
+        "height": 932,
+        "isMobile": true,
+        "hasTouch": true,
+        "expectGuard": true
+      },
+      "loadMs": 55283,
+      "navigationMs": null,
+      "screenshot": "docs/qa-screenshots/pos-responsive-landscape/mobile-430x932.png",
+      "metrics": {
+        "url": "http://localhost:3000/preview/pos",
+        "title": "POS Platform Back Office",
+        "posRootPresent": true,
+        "guardVisible": true,
+        "overflowPx": 0,
+        "hasHorizontalOverflow": false,
+        "interactiveCount": 2,
+        "smallTargetCount": 0,
+        "smallTargetSamples": [],
+        "cartVisible": false
+      },
+      "pass": true
+    },
+    {
+      "viewport": {
+        "key": "tablet-portrait-768x1024",
+        "width": 768,
+        "height": 1024,
+        "isMobile": true,
+        "hasTouch": true,
+        "expectGuard": true
+      },
+      "loadMs": 8637,
+      "navigationMs": null,
+      "screenshot": "docs/qa-screenshots/pos-responsive-landscape/tablet-portrait-768x1024.png",
+      "metrics": {
+        "url": "http://localhost:3000/preview/pos",
+        "title": "POS Platform Back Office",
+        "posRootPresent": true,
+        "guardVisible": true,
+        "overflowPx": 0,
+        "hasHorizontalOverflow": false,
+        "interactiveCount": 2,
+        "smallTargetCount": 0,
+        "smallTargetSamples": [],
+        "cartVisible": false
+      },
+      "pass": true
+    },
+    {
+      "viewport": {
+        "key": "narrow-767x900",
+        "width": 767,
+        "height": 900,
+        "isMobile": false,
+        "hasTouch": false,
+        "expectGuard": true
+      },
+      "loadMs": 7214,
+      "navigationMs": null,
+      "screenshot": "docs/qa-screenshots/pos-responsive-landscape/narrow-767x900.png",
+      "metrics": {
+        "url": "http://localhost:3000/preview/pos",
+        "title": "POS Platform Back Office",
+        "posRootPresent": true,
+        "guardVisible": true,
+        "overflowPx": 0,
+        "hasHorizontalOverflow": false,
+        "interactiveCount": 2,
+        "smallTargetCount": 0,
+        "smallTargetSamples": [],
+        "cartVisible": false
+      },
+      "pass": true
+    }
+  ]
+}

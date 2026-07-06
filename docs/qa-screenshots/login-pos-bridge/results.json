@@ -1,0 +1,64 @@
+{
+  "generatedAt": "2026-06-03T16:52:38.408Z",
+  "loginBaseUrl": "http://localhost:3000/login/store",
+  "posBaseUrl": "http://localhost:3000/preview/pos",
+  "storeCode": "NDL-TH-001",
+  "preferredBranch": "",
+  "preferredDevice": "",
+  "steps": [
+    {
+      "at": "2026-06-03T16:52:40.677Z",
+      "name": "open_login_store",
+      "ok": true
+    },
+    {
+      "at": "2026-06-03T16:53:02.243Z",
+      "name": "api_store_verify",
+      "ok": true,
+      "status": 200
+    },
+    {
+      "at": "2026-06-03T16:53:02.243Z",
+      "name": "submit_store_code",
+      "ok": true
+    },
+    {
+      "at": "2026-06-03T16:53:04.568Z",
+      "name": "branch_step_detected",
+      "ok": true
+    },
+    {
+      "at": "2026-06-03T16:53:23.833Z",
+      "name": "confirm_branch_selection",
+      "ok": true,
+      "status": 200
+    },
+    {
+      "at": "2026-06-03T16:53:40.811Z",
+      "name": "employee_verified_via_code",
+      "ok": true,
+      "status": 200,
+      "employeeCode": "EMP-000101"
+    },
+    {
+      "at": "2026-06-03T16:54:01.629Z",
+      "name": "api_device_select",
+      "ok": true,
+      "status": 200
+    },
+    {
+      "at": "2026-06-03T16:54:08.087Z",
+      "name": "redirect_to_pos_preview",
+      "ok": true,
+      "url": "http://localhost:3000/preview/pos"
+    },
+    {
+      "at": "2026-06-03T16:54:48.759Z",
+      "name": "api_session_current",
+      "ok": true,
+      "status": 200
+    }
+  ],
+  "result": "passed",
+  "errors": []
+}

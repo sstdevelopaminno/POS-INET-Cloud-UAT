@@ -1,0 +1,143 @@
+{
+  "generated_at": "2026-06-04T18:52:32.526Z",
+  "config": {
+    "login_base": "http://localhost:3000",
+    "pos_base": "http://localhost:3000",
+    "store_code": "BBQ-TH-002",
+    "employee_codes": [
+      "182536",
+      "MGR-459509"
+    ],
+    "device_codes": [
+      "BBQ-BKK-01-POS-01",
+      "BBQ-BKK-01-POS-02"
+    ],
+    "branch_code": "BBQ-BKK-01",
+    "seconds": 10,
+    "concurrency": 2,
+    "timeout_ms": 15000,
+    "mode": "round_robin",
+    "force_override": true,
+    "verify_pos_session": true
+  },
+  "totals": {
+    "flows": 6,
+    "passed": 6,
+    "failed": 0,
+    "flow_error_rate_pct": 0,
+    "throughput_flows_per_sec": 0.6,
+    "flow_latency_ms": {
+      "count": 6,
+      "min": 3528,
+      "p50": 3754,
+      "p95": 4670,
+      "p99": 4670,
+      "max": 4670,
+      "avg": 3994.33
+    }
+  },
+  "bottleneck_indicators": {
+    "device_in_use_conflicts": 0,
+    "session_scope_conflicts": 0,
+    "scope_mismatch_branch": 0,
+    "conflict_share_of_failed_flows_pct": 0
+  },
+  "failures": {},
+  "steps": {
+    "store_verify": {
+      "requests": 6,
+      "ok": 6,
+      "failed": 0,
+      "error_rate_pct": 0,
+      "latency_ms": {
+        "count": 6,
+        "min": 322,
+        "p50": 356,
+        "p95": 933,
+        "p99": 933,
+        "max": 933,
+        "avg": 512.33
+      },
+      "status_counts": {
+        "200": 6
+      },
+      "error_codes": {}
+    },
+    "branch_select": {
+      "requests": 6,
+      "ok": 6,
+      "failed": 0,
+      "error_rate_pct": 0,
+      "latency_ms": {
+        "count": 6,
+        "min": 177,
+        "p50": 200,
+        "p95": 424,
+        "p99": 424,
+        "max": 424,
+        "avg": 250.83
+      },
+      "status_counts": {
+        "200": 6
+      },
+      "error_codes": {}
+    },
+    "employee_verify": {
+      "requests": 6,
+      "ok": 6,
+      "failed": 0,
+      "error_rate_pct": 0,
+      "latency_ms": {
+        "count": 6,
+        "min": 662,
+        "p50": 714,
+        "p95": 890,
+        "p99": 890,
+        "max": 890,
+        "avg": 753.83
+      },
+      "status_counts": {
+        "200": 6
+      },
+      "error_codes": {}
+    },
+    "device_select": {
+      "requests": 6,
+      "ok": 6,
+      "failed": 0,
+      "error_rate_pct": 0,
+      "latency_ms": {
+        "count": 6,
+        "min": 1645,
+        "p50": 1866,
+        "p95": 2218,
+        "p99": 2218,
+        "max": 2218,
+        "avg": 1915.33
+      },
+      "status_counts": {
+        "200": 6
+      },
+      "error_codes": {}
+    },
+    "session_current": {
+      "requests": 6,
+      "ok": 6,
+      "failed": 0,
+      "error_rate_pct": 0,
+      "latency_ms": {
+        "count": 6,
+        "min": 398,
+        "p50": 419,
+        "p95": 857,
+        "p99": 857,
+        "max": 857,
+        "avg": 561.5
+      },
+      "status_counts": {
+        "200": 6
+      },
+      "error_codes": {}
+    }
+  }
+}
