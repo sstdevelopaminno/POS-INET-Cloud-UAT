@@ -2,6 +2,8 @@
 
 This document is the working plan for moving `POS-INET-Cloud-UAT` from temporary UAT wiring to a stable GitHub + Vercel + INET Cloud server/database setup.
 
+For the source of each required Vercel and bridge variable, see `docs/INET-CLOUD-ENV-SOURCE-MATRIX.md`.
+
 ## Current State
 
 - Source project: `POS-INET-Cloud-UAT`, copied from `POS-Preview`.
