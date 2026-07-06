@@ -10,7 +10,7 @@ For the source of each required Vercel and bridge variable, see `docs/INET-CLOUD
 - Web app target: Vercel project `pos-inet-cloud-uat`.
 - Payment bridge: standalone Node.js/Fastify service in `E:\INET-Payment-Bridge`.
 - INET payment target: INET Payment UAT.
-- Database today: Supabase-compatible Postgres configuration is still used by the POS app.
+- Database today: INET Cloud database is not live yet. Vercel has been guarded so this UAT deployment does not use the POS Preview Supabase database.
 - Temporary tunnel URLs must not be treated as production or stable UAT infrastructure.
 
 ## Target Architecture
@@ -26,7 +26,7 @@ GitHub repo
 - GitHub is the source of truth for code.
 - Vercel deploys the POS web app from GitHub.
 - INET Cloud server hosts the bridge with a stable HTTPS endpoint.
-- INET Cloud database becomes the POS database target after migration.
+- INET Cloud database becomes the POS database target after migration. Because the app currently uses Supabase client APIs, the INET target must be Supabase-compatible or the app data layer must be refactored.
 - INET secrets stay only in bridge/server environment variables.
 - Vercel only stores bridge URL, bridge API key, database connection values, and POS callback config required by server-side code.
 
@@ -64,6 +64,7 @@ Before commit, confirm no real `.env`, INET secret, database password, Vercel to
 Set these Vercel environment variables for `pos-inet-cloud-uat`:
 
 ```text
+POS_DATABASE_TARGET=inet_cloud
 INET_PAYMENT_BRIDGE_URL=https://BRIDGE_DOMAIN_OR_IP
 INET_PAYMENT_BRIDGE_API_KEY=SERVER_SIDE_SECRET
 INET_NOPS_ENV=uat
@@ -75,17 +76,16 @@ Do not set INET merchant secrets in frontend variables. Do not use `NEXT_PUBLIC_
 
 ## Phase 3 - Move Database To INET Cloud
 
-Preferred target is Postgres so the existing Supabase schema and SQL migrations remain portable.
+Preferred target is a Supabase-compatible service on INET Cloud so the existing Supabase client calls, REST-style queries, auth expectations, RLS policies, and SQL migrations remain portable.
 
-1. Provision INET Cloud Postgres-compatible database.
-2. Confirm SSL mode, host, port, database name, user, and migration account.
-3. Export schema and data from current UAT database.
-4. Apply migrations in the same order as the repository `supabase/migrations` directory.
-5. Import seed/UAT data only after schema and policies are verified.
-6. Configure Vercel server-side database env values.
-7. Run login, POS order, payment, receipt, and admin smoke tests.
+1. Provision a Supabase-compatible service on INET Cloud, or schedule a data-layer refactor for plain PostgreSQL.
+2. Confirm public HTTPS API URL, anon/public JWT, service-role JWT, SSL mode, host, port, database name, user, and migration account.
+3. Apply migrations in the same order as the repository `supabase/migrations` directory.
+4. Import isolated UAT seed data only after schema and policies are verified.
+5. Configure Vercel database env values from the INET-hosted service.
+6. Run login, POS order, payment, receipt, and admin smoke tests.
 
-If INET Cloud database is not Supabase-managed, verify replacement behavior for Auth, RLS, storage, and service-role operations before cutover.
+If INET Cloud database is not Supabase-compatible, verify replacement behavior for Auth, RLS, storage, realtime, PostgREST-style queries, and service-role operations before cutover.
 
 ## Phase 4 - End-To-End UAT
 
