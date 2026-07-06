@@ -3,10 +3,13 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const getAuthContext = vi.fn();
 const getSupabaseServiceClient = vi.fn();
 const appendAuditLog = vi.fn(async () => ({ inserted: true }));
+const requirePosApiFeature = vi.fn(async () => undefined);
+const featureGateFail = vi.fn(() => null);
 
 vi.mock("@/lib/auth-context", () => ({ getAuthContext }));
 vi.mock("@/lib/supabase-admin", () => ({ getSupabaseServiceClient }));
 vi.mock("@/lib/audit-log", () => ({ appendAuditLog }));
+vi.mock("@/lib/pos-api-feature-guard", () => ({ featureGateFail, requirePosApiFeature }));
 
 type QueryResult<T> = {
   data: T;
