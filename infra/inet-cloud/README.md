@@ -29,6 +29,7 @@ GitHub main
 
 - `inet-production.env.example` - local-only template for values that will be pushed to Vercel.
 - `check-inet-vm.ps1` - checks whether public ports are open from the current machine.
+- `apply-migrations.ps1` - applies `supabase/migrations` to the INET-hosted database using `psql`.
 - `set-vercel-env-from-file.ps1` - loads a local env file and writes selected values to Vercel production.
 - `smoke-production.ps1` - checks public Vercel routes and confirms login API fails closed until DB env exists.
 
@@ -48,7 +49,6 @@ Supabase self-hosting uses Docker and exposes APIs through the gateway. Official
 
 2. On the INET VM or INET-managed service:
    - Provision Supabase-compatible stack or database API.
-   - Apply SQL migrations from `supabase/migrations`.
    - Create isolated UAT tenant/store/branch/user/device seed data.
    - Deploy/start the payment bridge and expose it over HTTPS.
 
@@ -66,14 +66,20 @@ Copy-Item .\infra\inet-cloud\inet-production.env.example .\infra\inet-cloud\inet
 .\infra\inet-cloud\set-vercel-env-from-file.ps1 -EnvFile .\infra\inet-cloud\inet-production.env.local
 ```
 
-6. Redeploy Vercel production:
+6. Apply migrations after `DATABASE_URL` is filled:
+
+```powershell
+.\infra\inet-cloud\apply-migrations.ps1 -EnvFile .\infra\inet-cloud\inet-production.env.local
+```
+
+7. Redeploy Vercel production:
 
 ```powershell
 $env:Path = "C:\Program Files\nodejs;" + $env:Path
 & "C:\Users\Admins\AppData\Roaming\npm\vercel.cmd" --prod --yes
 ```
 
-7. Smoke test:
+8. Smoke test:
 
 ```powershell
 .\infra\inet-cloud\smoke-production.ps1
