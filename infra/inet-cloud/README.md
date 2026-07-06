@@ -30,6 +30,8 @@ GitHub main
 - `inet-production.env.example` - local-only template for values that will be pushed to Vercel.
 - `check-inet-vm.ps1` - checks whether public ports are open from the current machine.
 - `apply-migrations.ps1` - applies `supabase/migrations` to the INET-hosted database using `psql`.
+- `run-on-inet-vm.ps1` - preflight and firewall helper to run inside the INET VM.
+- `provision-supabase-compatible-api.md` - infrastructure guide for the required Supabase-compatible API.
 - `set-vercel-env-from-file.ps1` - loads a local env file and writes selected values to Vercel production.
 - `smoke-production.ps1` - checks public Vercel routes and confirms login API fails closed until DB env exists.
 
