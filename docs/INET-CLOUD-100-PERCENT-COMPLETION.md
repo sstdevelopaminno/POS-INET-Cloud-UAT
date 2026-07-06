@@ -23,6 +23,7 @@ This checklist defines what "100 percent complete" means for `POS-INET-Cloud-UAT
 - SQL migrations have not been applied to an INET-hosted database.
 - Bridge HTTPS URL is not available yet.
 - End-to-end payment callback replay/idempotency is not verified.
+- Remote provisioning is blocked until INET VM access is available through portal/RDP/WinRM/SSH or INET provides a managed database endpoint.
 
 ## Required INET Values
 
