@@ -32,6 +32,8 @@ This is enough to host the payment bridge on the INET VM. For database cutover, 
 
 ## Bridge Variables On INET VM
 
+The bridge source lives at `apps/inet-payment-bridge` in this repository.
+
 | Bridge variable | Source | Current action |
 | --- | --- | --- |
 | `PORT` | Bridge config. | Use `8787` internally, or `443` behind IIS/Nginx/Caddy reverse proxy. |
@@ -56,7 +58,7 @@ Important: the current app imports Supabase clients directly. A plain PostgreSQL
 
 ## Recommended Next Step
 
-1. Install and run the payment bridge on the INET VM.
+1. Install and run `apps/inet-payment-bridge` on the INET VM.
 2. Put a stable HTTPS reverse proxy in front of it.
 3. Set Vercel `INET_PAYMENT_BRIDGE_URL` to that HTTPS URL.
 4. Provision the INET-hosted database/API target before login or POS transaction testing.
