@@ -43,6 +43,35 @@ const TABLES: BrowserTable[] = [
     description: "User roles by branch"
   },
   {
+    id: "pos_user_profiles",
+    label: "POS User Profiles",
+    schema: "public",
+    table: "pos_user_profiles",
+    description: "POS employee codes and profile metadata"
+  },
+  {
+    id: "branch_login_policies",
+    label: "Branch Login Policies",
+    schema: "public",
+    table: "branch_login_policies",
+    description: "Branch login policy settings"
+  },
+  {
+    id: "branch_devices",
+    label: "Branch Devices",
+    schema: "public",
+    table: "branch_devices",
+    description: "Registered POS devices by branch",
+    orderBy: "created_at"
+  },
+  {
+    id: "pos_user_device_scopes",
+    label: "POS User Device Scopes",
+    schema: "public",
+    table: "pos_user_device_scopes",
+    description: "Optional user to POS device access scopes"
+  },
+  {
     id: "orders",
     label: "Sales Orders",
     schema: "public",
