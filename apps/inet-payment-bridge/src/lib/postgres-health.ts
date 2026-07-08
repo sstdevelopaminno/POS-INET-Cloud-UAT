@@ -55,7 +55,7 @@ export function checkInetPostgres() {
 
   const result = spawnSync(
     psql,
-    ["-v", "ON_ERROR_STOP=1", databaseUrl, "-t", "-A", "-F", ",", "-c", sql],
+    ["-v", "ON_ERROR_STOP=1", "-t", "-A", "-F", ",", "-c", sql, databaseUrl],
     {
       encoding: "utf8",
       timeout: 8000
