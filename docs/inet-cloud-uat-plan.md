@@ -12,6 +12,15 @@ Vercel POS -> INET Cloud Windows Bridge -> INET UAT API
 - INET Cloud Windows Bridge: a Windows-hosted bridge service that will hold INET Cloud connectivity details and forward approved payment operations to INET UAT.
 - INET UAT API: INET's test environment for validating payment behavior before production credentials are used.
 
+No-Supabase database target:
+
+```text
+Vercel POS -> INET Cloud PostgreSQL
+Vercel POS -> INET Cloud Windows Bridge -> INET UAT API
+```
+
+The plain PostgreSQL schema bootstrap is tracked in `docs/INET-CLOUD-POSTGRES-CUTOVER.md`.
+
 ## Files To Inspect Later
 
 - `apps/backoffice-web/.env.example`
@@ -63,4 +72,5 @@ Not prepared yet:
 
 - Stable INET Cloud server hosting for the bridge.
 - INET Cloud database cutover.
+- Full no-Supabase backend data/auth refactor from Supabase APIs to direct PostgreSQL.
 - Final Vercel environment switch from temporary bridge URL to stable INET Cloud bridge URL.
