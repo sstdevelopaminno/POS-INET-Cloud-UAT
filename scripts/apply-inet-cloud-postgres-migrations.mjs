@@ -1,11 +1,30 @@
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
 const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const databaseUrl = process.env.DATABASE_URL;
-const psql = process.env.PSQL_BIN || "psql";
+
+function findPsql() {
+  if (process.env.PSQL_BIN) return process.env.PSQL_BIN;
+
+  const windowsRoot = "C:\\Program Files\\PostgreSQL";
+  if (process.platform === "win32" && existsSync(windowsRoot)) {
+    const versions = readdirSync(windowsRoot)
+      .filter((name) => /^\d+$/.test(name))
+      .sort((left, right) => Number(right) - Number(left));
+
+    for (const version of versions) {
+      const candidate = join(windowsRoot, version, "bin", "psql.exe");
+      if (existsSync(candidate)) return candidate;
+    }
+  }
+
+  return "psql";
+}
+
+const psql = findPsql();
 
 if (!databaseUrl) {
   console.error("Missing DATABASE_URL. Example: postgres://user:password@host:5432/dbname?sslmode=require");
@@ -14,6 +33,7 @@ if (!databaseUrl) {
 
 function runSql(label, sql) {
   console.log(`\n==> ${label}`);
+  console.log(`Using psql: ${psql}`);
   const result = spawnSync(psql, [databaseUrl, "--set", "ON_ERROR_STOP=1"], {
     input: sql,
     encoding: "utf8",
