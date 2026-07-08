@@ -34,7 +34,7 @@ if (!databaseUrl) {
 function runSql(label, sql) {
   console.log(`\n==> ${label}`);
   console.log(`Using psql: ${psql}`);
-  const result = spawnSync(psql, [databaseUrl, "--set", "ON_ERROR_STOP=1"], {
+  const result = spawnSync(psql, ["-v", "ON_ERROR_STOP=1", databaseUrl], {
     input: sql,
     encoding: "utf8",
     stdio: ["pipe", "inherit", "inherit"]
