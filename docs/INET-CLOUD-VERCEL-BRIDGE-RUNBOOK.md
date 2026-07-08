@@ -52,6 +52,15 @@ Expected result:
 }
 ```
 
+The development table viewer is available at:
+
+```text
+https://pos-inet-cloud-uat.vercel.app/inet-cloud/db
+```
+
+It is read-only and requires `INET_CLOUD_HEALTH_API_KEY` before loading data.
+Only whitelisted UAT tables are exposed through the bridge.
+
 ## Step 3: Backend Cutover Boundary
 
 The INET PostgreSQL schema is ready, but the Vercel app still has many
