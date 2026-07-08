@@ -13,6 +13,7 @@
     "bridge:typecheck": "npm --prefix apps/inet-payment-bridge run typecheck",
     "bridge:build": "npm --prefix apps/inet-payment-bridge run build",
     "bridge:start": "npm --prefix apps/inet-payment-bridge run start",
+    "inet:db:apply": "node scripts/apply-inet-cloud-postgres-migrations.mjs",
     "cf:preview:backoffice": "corepack pnpm --filter backoffice-web cf:preview",
     "cf:deploy:backoffice": "corepack pnpm --filter backoffice-web cf:deploy",
     "qa:login-bridge": "node scripts/login-pos-bridge-smoke.mjs",
