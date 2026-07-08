@@ -8,7 +8,7 @@ For the source of each required Vercel and bridge variable, see `docs/INET-CLOUD
 
 - Source project: `POS-INET-Cloud-UAT`, copied from `POS-Preview`.
 - Web app target: Vercel project `pos-inet-cloud-uat`.
-- Payment bridge: standalone Node.js/Fastify service in `E:\INET-Payment-Bridge`.
+- Payment bridge: Node.js/Fastify app in `apps/inet-payment-bridge`.
 - INET payment target: INET Payment UAT.
 - Database today: INET Cloud database is not live yet. Vercel has been guarded so this UAT deployment does not use the POS Preview Supabase database.
 - Temporary tunnel URLs must not be treated as production or stable UAT infrastructure.
@@ -49,9 +49,9 @@ Before commit, confirm no real `.env`, INET secret, database password, Vercel to
 
 1. Provision INET Cloud server with a fixed public endpoint or domain.
 2. Install Node.js LTS and run the bridge as a Windows service or supervised process.
-3. Configure bridge environment from `.env.example` in `E:\INET-Payment-Bridge`.
-4. Set bridge `AP_URL` to `https://pos-inet-cloud-uat.vercel.app/payment/inet/result`.
-5. Set bridge POS callback URL to `https://pos-inet-cloud-uat.vercel.app/api/payments/inet/callback`.
+3. Configure bridge environment from `apps/inet-payment-bridge/.env.example`.
+4. Set bridge `INET_AP_URL` to `https://pos-inet-cloud-uat.vercel.app/payment/inet/result`.
+5. Set bridge `POS_INET_CALLBACK_URL` to `https://pos-inet-cloud-uat.vercel.app/api/payments/inet/callback`.
 6. Verify:
    - `GET /health`
    - `GET /ip`
@@ -121,13 +121,13 @@ pnpm --filter backoffice-web typecheck
 pnpm --filter backoffice-web build
 ```
 
-From `E:\INET-Payment-Bridge`:
+For the integrated bridge app:
 
 ```powershell
-npm install
-npm run typecheck
-npm run build
-npm run start
+npm install --prefix apps/inet-payment-bridge
+npm run bridge:typecheck
+npm run bridge:build
+npm run bridge:start
 ```
 
 ## No-Go Conditions
