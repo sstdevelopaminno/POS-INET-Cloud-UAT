@@ -35,6 +35,22 @@ GitHub main
 - `set-vercel-env-from-file.ps1` - loads a local env file and writes selected values to Vercel production.
 - `smoke-production.ps1` - checks public Vercel routes and confirms login API fails closed until DB env exists.
 
+## Payment Bridge App
+
+The INET Payment Bridge now lives in the same repository at:
+
+```text
+apps/inet-payment-bridge
+```
+
+Run it from the repo root:
+
+```powershell
+npm run bridge:typecheck
+npm run bridge:build
+npm run bridge:start
+```
+
 ## Recommended INET DB Path
 
 The current POS app uses `@supabase/supabase-js` and `@supabase/ssr`. A plain PostgreSQL URL is not enough for the current app. For the fastest cutover, provision a Supabase-compatible API on INET Cloud.
@@ -52,7 +68,7 @@ Supabase self-hosting uses Docker and exposes APIs through the gateway. Official
 2. On the INET VM or INET-managed service:
    - Provision Supabase-compatible stack or database API.
    - Create isolated UAT tenant/store/branch/user/device seed data.
-   - Deploy/start the payment bridge and expose it over HTTPS.
+   - Deploy/start `apps/inet-payment-bridge` and expose it over HTTPS.
 
 3. Back on this workstation, create a local secret file from:
 
