@@ -9,6 +9,10 @@
   "scripts": {
     "dev": "corepack pnpm --filter backoffice-web dev",
     "dev:pos": "node -e \"console.log('POS Preview: http://localhost:3000/preview/pos')\" && corepack pnpm --filter backoffice-web dev",
+    "bridge:dev": "npm --prefix apps/inet-payment-bridge run dev",
+    "bridge:typecheck": "npm --prefix apps/inet-payment-bridge run typecheck",
+    "bridge:build": "npm --prefix apps/inet-payment-bridge run build",
+    "bridge:start": "npm --prefix apps/inet-payment-bridge run start",
     "cf:preview:backoffice": "corepack pnpm --filter backoffice-web cf:preview",
     "cf:deploy:backoffice": "corepack pnpm --filter backoffice-web cf:deploy",
     "qa:login-bridge": "node scripts/login-pos-bridge-smoke.mjs",
