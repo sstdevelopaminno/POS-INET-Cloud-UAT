@@ -14,6 +14,7 @@
     "bridge:build": "npm --prefix apps/inet-payment-bridge run build",
     "bridge:start": "npm --prefix apps/inet-payment-bridge run start",
     "inet:db:apply": "node scripts/apply-inet-cloud-postgres-migrations.mjs",
+    "inet:db:seed-uat-stores": "node scripts/seed-inet-cloud-uat-stores.mjs",
     "cf:preview:backoffice": "corepack pnpm --filter backoffice-web cf:preview",
     "cf:deploy:backoffice": "corepack pnpm --filter backoffice-web cf:deploy",
     "qa:login-bridge": "node scripts/login-pos-bridge-smoke.mjs",
