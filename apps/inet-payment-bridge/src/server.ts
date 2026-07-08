@@ -1,5 +1,6 @@
 import "dotenv/config";
 import Fastify from "fastify";
+import { registerDbHealthRoute } from "./routes/db-health.js";
 import { registerHealthRoute } from "./routes/health.js";
 import { registerInetCallbackRoute } from "./routes/inet-callback.js";
 import { registerInetCreateQrRoute } from "./routes/inet-create-qr.js";
@@ -23,6 +24,7 @@ app.addContentTypeParser("application/json", { parseAs: "string" }, (request, bo
 });
 
 registerHealthRoute(app, serviceName);
+registerDbHealthRoute(app, serviceName);
 registerInetCreateQrRoute(app);
 registerInetCallbackRoute(app);
 
